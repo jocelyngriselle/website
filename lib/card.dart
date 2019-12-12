@@ -4,6 +4,7 @@ class PlanetRow extends StatelessWidget {
     @override
     Widget build(BuildContext context) {
       return Container(
+        color: Colors.red,
         height: 120.0,
         margin: const EdgeInsets.symmetric(
           vertical: 16.0,

@@ -9,7 +9,7 @@ import 'footer.dart';
 class AnimationsPlayground extends StatelessWidget {
   static Route<dynamic> route() {
     return PageRouteBuilder(
-      transitionDuration: const Duration(seconds: 5),
+      transitionDuration: const Duration(seconds: 3),
       pageBuilder: (BuildContext context, Animation<double> animation,
           Animation<double> secondaryAnimation) {
         return AnimationsPlayground();

@@ -84,25 +84,20 @@ class CourseDetails extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(bottom: 30),
-              padding: EdgeInsets.only(bottom: 30),
-              color: Colors.red,
-              child:Text(
-
-              "HELLO\nJOCELYN",
-                overflow: TextOverflow.visible,
+              Text(
+              "JOCELYN,\nDEV MOBILE",
               style: TextStyle(
                   fontWeight: FontWeight.w800,
                   fontSize: titleSize,
-                  height: 1,),
+                  height: 0.9,),
               textAlign: textAlignment,
-            ),),
+            ),
             SizedBox(
               height: 30,
             ),
             Text(
-              'Je suis Jocelyn Griselle, ingénieur en développement mobile et web en freelance. Je suis basé à Nantes, ouvert au télétravail mais pas tout le temps, disponible pour vos projets mobiles et data.',
+              'Je suis Jocelyn Griselle, ingénieur en développement mobile freelance. '
+                  'Je suis basé à Nantes et disponible pour vos projets mobiles et web.',
               style: TextStyle(fontSize: descriptionSize, height: 1.7),
               textAlign: textAlignment,
             ),
