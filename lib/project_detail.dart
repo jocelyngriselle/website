@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
-import "skill_model.dart";
+import "project_model.dart";
 
-class SkillDetail extends StatelessWidget {
-  final SkillModel _skill;
+class ProjectDetail extends StatelessWidget {
+  final ProjectModel _skill;
 
-  SkillDetail(this._skill);
+  ProjectDetail(this._skill);
 
   @override
   Widget build(BuildContext context) {

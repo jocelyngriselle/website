@@ -1,40 +1,51 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:website/skills.dart';
 import 'home.dart';
 import 'contact.dart';
 import 'services.dart';
+import 'portofolio.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-
-Widget _getRoute(String name) {
+Widget getRoute(String name) {
   switch (name) {
     case "Acceuil":
-      {return HomePage();}
+      {
+        return HomePage();
+      }
       break;
     case "Contact":
-      {return ContactPage();}
-      break;
-    case "Projets":
-      {return SkillsPage();}
+      {
+        return ContactPage();
+      }
       break;
     case "Services":
-      {return ServicesPage();}
+      {
+        return ServicesPage();
+      }
+      break;
+    case "Compétences":
+      {
+        return SkillsPage();
+      }
+      break;
+    case "Portofolio":
+      {
+        return PortofolioPage();
+      }
       break;
   }
 }
 
 Route createRoute(String name) {
-  print("in _createRoute()");
-  print(name);
-
   return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => _getRoute(name),
+    pageBuilder: (context, animation, secondaryAnimation) => getRoute(name),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var textOpacity = Tween(begin: 0.0, end: 1.0).animate(
         CurvedAnimation(
           parent: ModalRoute.of(context).animation,
-          curve: Interval(0.54, 0.84, curve: Curves.linear),
+          curve: Interval(0.0, 0.84, curve: Curves.linear),
         ),
       );
       return FadeTransition(
@@ -43,10 +54,7 @@ Route createRoute(String name) {
       );
     },
   );
-
-
 }
-
 
 class NavigationBar extends StatelessWidget {
   const NavigationBar({Key key}) : super(key: key);
@@ -59,7 +67,6 @@ class NavigationBar extends StatelessWidget {
     );
   }
 }
-
 
 class NavigationBarMobile extends StatelessWidget {
   const NavigationBarMobile({Key key}) : super(key: key);
@@ -82,8 +89,6 @@ class NavigationBarMobile extends StatelessWidget {
   }
 }
 
-
-
 class NavigationBarDesktop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -96,10 +101,44 @@ class NavigationBarDesktop extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              NavBarItem('Acceuil'),
-              NavBarItem('Services'),
-              NavBarItem('Projets'),
-              NavBarItem('Contact'),
+              NavBarItem(
+                'Services',
+                key: UniqueKey(),
+              ),
+              NavBarItem(
+                'Compétences',
+                key: UniqueKey(),
+              ),
+              NavBarItem(
+                'Portofolio',
+                key: UniqueKey(),
+              ),
+              OutlineButton(
+                borderSide: BorderSide(color: Theme.of(context).accentColor),
+                color: Theme.of(context).accentColor,
+                onPressed: () {
+                  Navigator.of(context).push(
+                    createRoute('Contact'),
+                  );
+                },
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                  child: Text(
+                    "Contact",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      color: Theme.of(context).accentColor,
+                      //fontWeight: FontWeight.w800,
+                      //color: Colors.white,
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
             ],
           )
         ],
@@ -126,7 +165,6 @@ class DrawerItem extends StatelessWidget {
     );
   }
 }
-
 
 class NavigationDrawerHeader extends StatelessWidget {
   const NavigationDrawerHeader({Key key}) : super(key: key);
@@ -164,8 +202,11 @@ class NavigationDrawer extends StatelessWidget {
     return Container(
       width: 300,
       decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 16)]),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(color: Colors.black12, blurRadius: 16),
+        ],
+      ),
       child: Column(
         children: <Widget>[
           NavigationDrawerHeader(),
@@ -177,8 +218,7 @@ class NavigationDrawer extends StatelessWidget {
   }
 }
 
-
-class NavBarItem extends StatelessWidget {
+class NavBarItem extends StatefulWidget {
   final String title;
 
   const NavBarItem(
@@ -187,24 +227,63 @@ class NavBarItem extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _NavBarItemState createState() => _NavBarItemState();
+}
+
+class _NavBarItemState extends State<NavBarItem> {
+  bool _selected = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _selected = false;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(createRoute(title));
+    //print(widget.title);
+    //print(_selected);
+//    return InkWell(
+//      borderRadius: BorderRadius.circular(5.0),
+//      onTap: () {
+//        Navigator.of(context).push(createRoute(widget.title));
+//      },
+//      child: Container(
+//        padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
+//        child: Text(
+//          widget.title,
+//          style: TextStyle(
+//            fontSize: _selected ? 18 : 18,
+//            color: Colors.black,
+//
+//          ),
+//        ),
+//      ),
+//    );
+    return FlatButton(
+      //color: Color.fromARGB(255, 31, 229, 146),
+      onPressed: () {
+        Navigator.of(context).push(
+          createRoute(widget.title),
+        );
       },
-      child: 
-      Container(
-        padding: EdgeInsets.all(30),
-        child:
-        Text(
-          title,
-          style: TextStyle(fontSize: 18),
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        child: Text(
+          widget.title,
+          style: TextStyle(
+            fontSize: 18,
+            //fontWeight: FontWeight.w800,
+            //color: Colors.white,
+          ),
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
         ),
       ),
     );
   }
 }
-
 
 class NavBarLogo extends StatelessWidget {
   @override
@@ -220,27 +299,48 @@ class NavBarLogo extends StatelessWidget {
 class NavBarSocials extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return
-      Row(
-        children: <Widget>[
-          IconButton(
-            icon: Icon(FontAwesomeIcons.twitter),
-            onPressed: () {},
+    return Row(
+      children: <Widget>[
+        SizedBox(
+          height: 45,
+          width: 45,
+          child: InkResponse(
+            onTap: () {
+              Navigator.of(context).push(
+                createRoute('Acceuil'),
+              );
+            },
+            child: Image.asset('images/logo.png'),
           ),
-          IconButton(
-            icon: Icon(FontAwesomeIcons.linkedin),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(FontAwesomeIcons.medium),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(FontAwesomeIcons.github),
-            onPressed: () {},
-          ),
-        ],
-      );
-  }
+        ),
+//        SizedBox(
+//          width: 10,
+//        ),
+//        Text(
+//          'Jocelyn Griselle',
+//          style: TextStyle(
+//              color: Theme.of(context).accentColor,
+//              fontFamily: 'Open sans',
+//              fontSize: 24),
+//        )
 
+//        IconButton(
+//          icon: Icon(FontAwesomeIcons.twitter),
+//          onPressed: () {},
+//        ),
+//        IconButton(
+//          icon: Icon(FontAwesomeIcons.linkedin),
+//          onPressed: () {},
+//        ),
+//        IconButton(
+//          icon: Icon(FontAwesomeIcons.medium),
+//          onPressed: () {},
+//        ),
+//        IconButton(
+//          icon: Icon(FontAwesomeIcons.github),
+//          onPressed: () {},
+//        ),
+      ],
+    );
+  }
 }

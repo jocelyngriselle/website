@@ -1,33 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-import 'navigation.dart';
-import 'centered_view.dart';
+import 'layout.dart';
 import 'button.dart';
-import 'footer.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ResponsiveBuilder(
-      builder: (context, sizingInformation) => Scaffold(
-        drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
-            ? NavigationDrawer()
-            : null,
-        backgroundColor: Colors.white,
-        body: CenteredView(
-          child: Column(children: <Widget>[
-            NavigationBar(),
-            Expanded(
-              child: ScreenTypeLayout(
-                desktop: HomeContentDesktop(),
-                tablet: HomeContentMobile(),
-                mobile: HomeContentMobile(),
-              ),
-            )
-          ]),
-        ),
-        bottomNavigationBar: Footer()
+    return Page(
+      content: ScreenTypeLayout(
+        desktop: HomeContentDesktop(),
+        tablet: HomeContentMobile(),
+        mobile: HomeContentMobile(),
       ),
     );
   }
@@ -73,7 +57,7 @@ class CourseDetails extends StatelessWidget {
       double titleSize =
           sizingInformation.deviceScreenType == DeviceScreenType.Mobile
               ? 50
-              : 80;
+              : 50;
       double descriptionSize =
           sizingInformation.deviceScreenType == DeviceScreenType.Mobile
               ? 16
@@ -84,21 +68,29 @@ class CourseDetails extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-              Text(
-              "JOCELYN,\nDEV MOBILE",
-              style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                  fontSize: titleSize,
-                  height: 0.9,),
-              textAlign: textAlignment,
+            RichText(
+              text: TextSpan(
+                text: "Jocelyn Griselle,\n",
+                style: Theme.of(context).textTheme.headline1,
+                children: <TextSpan>[
+                  TextSpan(
+                    text: 'développeur ',
+                    style: Theme.of(context).textTheme.headline1,
+                  ),
+                  TextSpan(
+                    text: ' fullstack ', //' backend & mobile ',
+                    style: Theme.of(context).textTheme.headline2,
+                  ),
+                ],
+              ),
             ),
             SizedBox(
               height: 30,
             ),
             Text(
-              'Je suis Jocelyn Griselle, ingénieur en développement mobile freelance. '
-                  'Je suis basé à Nantes et disponible pour vos projets mobiles et web.',
-              style: TextStyle(fontSize: descriptionSize, height: 1.7),
+              'Ingénieur en développement freelance, '
+              'je suis basé à Nantes et disponible pour vos projets web et mobile.',
+              style: Theme.of(context).textTheme.bodyText1,
               textAlign: textAlignment,
             ),
             SizedBox(

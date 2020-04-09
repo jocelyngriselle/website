@@ -1,17 +1,17 @@
 import "package:flutter/material.dart";
-import "skill_model.dart";
-import "skill_detail.dart";
+import "project_model.dart";
+import "project_detail.dart";
 
 
-class Skill extends StatelessWidget {
-  final SkillModel _skill;
+class Project extends StatelessWidget {
+  final ProjectModel _skill;
 
-  Skill(this._skill);
+  Project(this._skill);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => SkillDetail(_skill))),
+      onTap: () =>  Navigator.push(context, MaterialPageRoute(builder: (context) => ProjectDetail(_skill))),
       child: Container(
         /// Give nice padding
         padding: EdgeInsets.all(10),

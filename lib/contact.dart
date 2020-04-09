@@ -1,31 +1,21 @@
 import 'package:flutter/material.dart';
-import 'navigation.dart';
-import 'centered_view.dart';
-import 'footer.dart';
+import 'layout.dart';
 
 class ContactPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: CenteredView(
-        child: Column(
-          children: <Widget>[
-            NavigationBar(),
-            Expanded(
-              child:
-                ContactForm(),
-            )
-          ],
-        ),
+    return Page(
+      content: Row(
+        children: <Widget>[
+          Expanded(
+            child: ImageDetails(),
+          ),
+          ContactForm(),
+        ],
       ),
-        bottomNavigationBar: Footer(),
     );
   }
 }
-
-
 
 // Create a Form widget.
 class ContactForm extends StatefulWidget {
@@ -49,99 +39,116 @@ class ContactFormState extends State<ContactForm> {
   Widget build(BuildContext context) {
     // Build a Form widget using the _formKey created above.
     return Container(
-      width: 600,
-      child: Center(child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextFormField(
-              style:  TextStyle(fontSize: 21, height: 1.7),
-              decoration: const InputDecoration(
-                hintText: 'Comment vous appelez vous?',
-                labelText: "Nom",
-                labelStyle : TextStyle(fontSize: 21, height: 1.7),
-                hintStyle : TextStyle(fontSize: 21, height: 1.7),
-                errorStyle : TextStyle(fontSize: 21),
+      //color: Colors.blue,
+      width: 700,
+      child: Center(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextFormField(
+                style: TextStyle(fontSize: 21, height: 1.7),
+                decoration: const InputDecoration(
+                  hintText: 'Quel est votre nom ?',
+                  labelText: "Nom",
+                  labelStyle: TextStyle(fontSize: 21, height: 1.7),
+                  hintStyle: TextStyle(fontSize: 21, height: 1.7),
+                  errorStyle: TextStyle(fontSize: 21),
+                ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Veuillez renseigner ce champ';
+                  }
+                  return null;
+                },
               ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Veuillez renseigner ce champ';
-                }
-                return null;
-              },
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            TextFormField(
-              style:  TextStyle(fontSize: 21, height: 1.7),
-              decoration: const InputDecoration(
-                labelText: 'Prénom ( optionnel )',
-                  labelStyle : TextStyle(fontSize: 21, height: 1.7),
-                hintText: 'Comment vous appelez vous?',
-                hintStyle : TextStyle(fontSize: 21, height: 1.7),
+              SizedBox(
+                height: 30,
               ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            TextFormField(
-              minLines: 4,
-              maxLines: null,
-              style:  TextStyle(fontSize: 21, height: 1.7),
-              decoration: const InputDecoration(
-                hintText: 'Comment vous appelez vous?',
-                labelText: "Message",
-                labelStyle : TextStyle(fontSize: 21, height: 1.7),
-                hintStyle : TextStyle(fontSize: 21, height: 1.7),
-                errorStyle : TextStyle(fontSize: 21),
+              TextFormField(
+                style: TextStyle(fontSize: 21, height: 1.7),
+                decoration: const InputDecoration(
+                  labelText: 'Prénom ( optionnel )',
+                  labelStyle: TextStyle(fontSize: 21, height: 1.7),
+                  hintText: 'Quel est votre prénom ?',
+                  hintStyle: TextStyle(fontSize: 21, height: 1.7),
+                ),
               ),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Veuillez renseigner ce champ';
-                }
-                return null;
-              },
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Center(child:
-            InkWell(
-              onTap: () {
-                // Validate returns true if the form is valid, or false
-                // otherwise.
-                if (_formKey.currentState.validate()) {
-                  // If the form is valid, display a Snackbar.
-                  Scaffold.of(context)
-                      .showSnackBar(SnackBar(
-                    content: Text('Votre message a bien été envoyé'),
-                    backgroundColor: Color.fromARGB(255, 31, 229, 146),),);
-                }
-              },
-              child:
-              Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 60, vertical: 15),
-                child: Text(
-                  "Envoyer",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                    color: Colors.white,
+              SizedBox(
+                height: 30,
+              ),
+              TextFormField(
+                minLines: 4,
+                maxLines: null,
+                style: TextStyle(fontSize: 21, height: 1.7),
+                decoration: const InputDecoration(
+                  hintText: 'Que voulez vous me dire ?',
+                  labelText: "Message",
+                  labelStyle: TextStyle(fontSize: 21, height: 1.7),
+                  hintStyle: TextStyle(fontSize: 21, height: 1.7),
+                  errorStyle: TextStyle(fontSize: 21),
+                ),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Veuillez renseigner ce champ';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Center(
+                child: InkWell(
+                  onTap: () {
+                    // Validate returns true if the form is valid, or false
+                    // otherwise.
+                    if (_formKey.currentState.validate()) {
+                      // If the form is valid, display a Snackbar.
+                      // TODO send me an email
+                      Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Votre message a bien été envoyé'),
+                          backgroundColor: Color.fromARGB(255, 31, 229, 146),
+                        ),
+                      );
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 60, vertical: 15),
+                    child: Text(
+                      "Envoyer",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                        color: Color.fromARGB(255, 31, 229, 146),
+                        borderRadius: BorderRadius.circular(5)),
                   ),
                 ),
-              decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 31, 229, 146),
-                  borderRadius: BorderRadius.circular(5)),
-            ),
-            ),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class ImageDetails extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SizedBox(
+        height: 380,
+        width: 280,
+        child: Image.asset('images/contact.png'),
       ),
     );
   }

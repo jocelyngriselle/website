@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'home.dart';
 import 'navigation.dart';
-import 'centered_view.dart';
+import 'layout.dart';
 import 'footer.dart';
-
 
 class AnimationsPlayground extends StatelessWidget {
   static Route<dynamic> route() {
@@ -19,12 +18,13 @@ class AnimationsPlayground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ScreenTypeLayout(
+    return Layout(
+      navbar: AnimatedNavbar(), // AnimatedNavbar
+      content: ScreenTypeLayout(
           desktop: DesktopAnimatedApp(),
           tablet: MobileAnimatedApp(),
           mobile: MobileAnimatedApp()),
-      bottomNavigationBar: AnimatedFooter(),
+      footer: AnimatedFooter(),
     );
   }
 }
@@ -34,8 +34,9 @@ class DesktopAnimatedApp extends StatefulWidget {
   _DesktopAnimatedAppState createState() => _DesktopAnimatedAppState();
 }
 
-class _DesktopAnimatedAppState extends State<DesktopAnimatedApp> {
-  Animation<double> controller;
+class _DesktopAnimatedAppState extends State<DesktopAnimatedApp>
+    with SingleTickerProviderStateMixin {
+  AnimationController controller;
   Animation<Offset> imageTranslation;
   Animation<Offset> textTranslation;
   Animation<Offset> navbarTranslation;
@@ -44,50 +45,52 @@ class _DesktopAnimatedAppState extends State<DesktopAnimatedApp> {
   Animation<double> textOpacity;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (controller == null) {
-      controller = ModalRoute.of(context).animation;
-      imageTranslation = Tween(
-        begin: Offset(-0.5, 0.0),
-        end: Offset(0.0, 0.0),
-      ).animate(
-        CurvedAnimation(
-          parent: controller,
-          curve: Interval(0.6, 0.8, curve: Curves.fastOutSlowIn),
-        ),
-      );
-      imageOpacity = Tween(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-          parent: controller,
-          curve: Interval(0.2, 0.45, curve: Curves.easeIn),
-        ),
-      );
-      textTranslation = Tween(
-        begin: Offset(0.0, 1.0),
-        end: Offset(0.0, 0.0),
-      ).animate(
-        CurvedAnimation(
-          parent: controller,
-          curve: Interval(0.54, 0.84, curve: Curves.ease),
-        ),
-      );
-      textOpacity = Tween(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-          parent: controller,
-          curve: Interval(0.54, 0.84, curve: Curves.linear),
-        ),
-      );
-      navbarTranslation = Tween(
-        begin: Offset(0.0, -5.0),
-        end: Offset(0.0, 0.0),
-      ).animate(
-        CurvedAnimation(
-          parent: controller,
-          curve: Interval(0.8, 1.0, curve: Curves.easeIn),
-        ),
-      );
-    }
+  void initState() {
+    // this shouldnt go here
+    super.initState();
+    controller = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    )..forward();
+    imageTranslation = Tween(
+      begin: Offset(-0.5, 0.0),
+      end: Offset(0.0, 0.0),
+    ).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(0.6, 0.8, curve: Curves.fastOutSlowIn),
+      ),
+    );
+    imageOpacity = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(0.2, 0.45, curve: Curves.easeIn),
+      ),
+    );
+    textTranslation = Tween(
+      begin: Offset(0.0, 1.0),
+      end: Offset(0.0, 0.0),
+    ).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(0.54, 0.84, curve: Curves.ease),
+      ),
+    );
+    textOpacity = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(0.54, 0.84, curve: Curves.linear),
+      ),
+    );
+    navbarTranslation = Tween(
+      begin: Offset(0.0, -5.0),
+      end: Offset(0.0, 0.0),
+    ).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(0.8, 1.0, curve: Curves.easeIn),
+      ),
+    );
   }
 
   @override
@@ -95,35 +98,25 @@ class _DesktopAnimatedAppState extends State<DesktopAnimatedApp> {
     return AnimatedBuilder(
       animation: controller,
       builder: (BuildContext context, Widget child) {
-        return CenteredView(
-          child: Column(
-            children: <Widget>[
-              FractionalTranslation(
-                translation: navbarTranslation.value,
-                child: NavigationBar(),
+        return Row(
+          children: [
+            FractionalTranslation(
+              translation: textTranslation.value,
+              child: FadeTransition(
+                opacity: textOpacity,
+                child: CourseDetails(),
               ),
-              Expanded(
-                child: Row(children: [
-                  FractionalTranslation(
-                    translation: textTranslation.value,
-                    child: FadeTransition(
-                      opacity: textOpacity,
-                      child: CourseDetails(),
-                    ),
-                  ),
-                  Expanded(
-                    child: FractionalTranslation(
-                      translation: imageTranslation.value,
-                      child: FadeTransition(
-                        opacity: imageOpacity,
-                        child: ImageDetails(),
-                      ),
-                    ),
-                  ),
-                ]),
+            ),
+            Expanded(
+              child: FractionalTranslation(
+                translation: imageTranslation.value,
+                child: FadeTransition(
+                  opacity: imageOpacity,
+                  child: ImageDetails(),
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
@@ -135,8 +128,9 @@ class MobileAnimatedApp extends StatefulWidget {
   _MobileAnimatedAppState createState() => _MobileAnimatedAppState();
 }
 
-class _MobileAnimatedAppState extends State<MobileAnimatedApp> {
-  Animation<double> controller;
+class _MobileAnimatedAppState extends State<MobileAnimatedApp>
+    with SingleTickerProviderStateMixin {
+  AnimationController controller;
   Animation<Offset> imageTranslation;
   Animation<Offset> textTranslation;
   Animation<Offset> navbarTranslation;
@@ -145,35 +139,36 @@ class _MobileAnimatedAppState extends State<MobileAnimatedApp> {
   Animation<double> textOpacity;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (controller == null) {
-      controller = ModalRoute.of(context).animation;
-      textTranslation = Tween(
-        begin: Offset(0.0, 1.0),
-        end: Offset(0.0, 0.0),
-      ).animate(
-        CurvedAnimation(
-          parent: controller,
-          curve: Interval(0, 0.4, curve: Curves.ease),
-        ),
-      );
-      textOpacity = Tween(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-          parent: controller,
-          curve: Interval(0.1, 0.5, curve: Curves.linear),
-        ),
-      );
-      navbarTranslation = Tween(
-        begin: Offset(0.0, -5.0),
-        end: Offset(0.0, 0.0),
-      ).animate(
-        CurvedAnimation(
-          parent: controller,
-          curve: Interval(0.4, 0.7, curve: Curves.easeIn),
-        ),
-      );
-    }
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    )..forward();
+    textTranslation = Tween(
+      begin: Offset(0.0, 1.0),
+      end: Offset(0.0, 0.0),
+    ).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(0, 0.4, curve: Curves.ease),
+      ),
+    );
+    textOpacity = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(0.1, 0.5, curve: Curves.linear),
+      ),
+    );
+    navbarTranslation = Tween(
+      begin: Offset(0.0, -5.0),
+      end: Offset(0.0, 0.0),
+    ).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(0.4, 0.7, curve: Curves.easeIn),
+      ),
+    );
   }
 
   @override
@@ -181,56 +176,53 @@ class _MobileAnimatedAppState extends State<MobileAnimatedApp> {
     return AnimatedBuilder(
       animation: controller,
       builder: (BuildContext context, Widget child) {
-        return CenteredView(
-          child: Column(
-            children: <Widget>[
-              FractionalTranslation(
-                translation: navbarTranslation.value,
-                child: NavigationBar(),
-              ),
-              Expanded(
-                child: FractionalTranslation(
-                  translation: textTranslation.value,
-                  child: FadeTransition(
-                    opacity: textOpacity,
-                    child: HomeContentMobile(),
-                  ),
-                ),
-              ),
-            ],
+        return Layout(
+          navbar: FractionalTranslation(
+            translation: navbarTranslation.value,
+            child: NavigationBar(),
           ),
+          content: Expanded(
+            child: FractionalTranslation(
+              translation: textTranslation.value,
+              child: FadeTransition(
+                opacity: textOpacity,
+                child: HomeContentMobile(),
+              ),
+            ),
+          ),
+          footer: AnimatedFooter(),
         );
       },
     );
   }
 }
 
-
-
 class AnimatedFooter extends StatefulWidget {
   @override
   AnimatedFooterState createState() => AnimatedFooterState();
 }
 
-class AnimatedFooterState extends State<AnimatedFooter> {
-  Animation<double> controller;
+class AnimatedFooterState extends State<AnimatedFooter>
+    with SingleTickerProviderStateMixin {
+  AnimationController controller;
   Animation<Offset> footerTranslation;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (controller == null) {
-      controller = ModalRoute.of(context).animation;
-      footerTranslation = Tween(
-        begin: Offset(0.0, 5.0),
-        end: Offset(0.0, 0.0),
-      ).animate(
-        CurvedAnimation(
-          parent: controller,
-          curve: Interval(0.8, 1.0, curve: Curves.easeIn),
-        ),
-      );
-    }
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    )..forward();
+    footerTranslation = Tween(
+      begin: Offset(0.0, 5.0),
+      end: Offset(0.0, 0.0),
+    ).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(0.8, 1.0, curve: Curves.easeIn),
+      ),
+    );
   }
 
   @override
@@ -241,6 +233,48 @@ class AnimatedFooterState extends State<AnimatedFooter> {
         return FractionalTranslation(
           translation: footerTranslation.value,
           child: Footer(),
+        );
+      },
+    );
+  }
+}
+
+class AnimatedNavbar extends StatefulWidget {
+  @override
+  AnimatedNavbarState createState() => AnimatedNavbarState();
+}
+
+class AnimatedNavbarState extends State<AnimatedNavbar>
+    with SingleTickerProviderStateMixin {
+  AnimationController controller;
+  Animation<Offset> navbarTranslation;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    )..forward();
+    navbarTranslation = Tween(
+      begin: Offset(0.0, -5.0),
+      end: Offset(0.0, 0.0),
+    ).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(0.8, 1.0, curve: Curves.easeIn),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (BuildContext context, Widget child) {
+        return FractionalTranslation(
+          translation: navbarTranslation.value,
+          child: NavigationBar(),
         );
       },
     );

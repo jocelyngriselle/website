@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class PlanetRow extends StatelessWidget {
-    @override
-    Widget build(BuildContext context) {
-      return Container(
+  @override
+  Widget build(BuildContext context) {
+    return Container(
         color: Colors.red,
         height: 120.0,
         margin: const EdgeInsets.symmetric(
@@ -15,19 +15,15 @@ class PlanetRow extends StatelessWidget {
             PlanetCard(),
             PlanetThumbnail(),
           ],
-        )
-      );
-    }
+        ));
   }
-
+}
 
 class PlanetThumbnail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(
-          vertical: 16.0
-      ),
+      margin: EdgeInsets.symmetric(vertical: 16.0),
       alignment: FractionalOffset.centerLeft,
       child: Image(
         image: AssetImage("images/blink.png"),

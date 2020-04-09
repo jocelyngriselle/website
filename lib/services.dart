@@ -1,57 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-
-import 'navigation.dart';
-import 'centered_view.dart';
 import 'button.dart';
-import 'footer.dart';
-import 'card.dart';
+import 'layout.dart';
 
 class ServicesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ResponsiveBuilder(
-      builder: (context, sizingInformation) => Scaffold(
-          drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
-              ? NavigationDrawer()
-              : null,
-          backgroundColor: Colors.white,
-          body: CenteredView(
-            child: Column(children: <Widget>[
-              NavigationBar(),
-              Expanded(
-                child: ScreenTypeLayout(
-                  desktop: ServicesContentDesktop(),
-                  tablet: ServicesContentMobile(),
-                  mobile: ServicesContentMobile(),
-                ),
-              )
-            ]),
-          ),
-          bottomNavigationBar: Footer()),
-    );
-  }
-}
-
-
-class ServiceCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      Row(children: <Widget>[
-        Image(
-          image: AssetImage("images/blink.png"),
-          height: 92.0,
-          width: 92.0,
-        ),
-        Text(
-          'Sécurité & RGPD',
-        ),
-      ],),
-      Text(
-        'In this course we will go over the basics of using Flutter Web for website development.',
+    return Page(
+      content: ScreenTypeLayout(
+        desktop: ServicesContentDesktop(),
+        tablet: ServicesContentMobile(),
+        mobile: ServicesContentMobile(),
       ),
-    ]);
+    );
   }
 }
 
@@ -60,38 +21,77 @@ class ServicesContentDesktop extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            ServiceCard(),
-            ServiceCard(),
-            ServiceCard(),
-          ],
+//        SizedBox(
+//          height: 30,
+//        ),
+//        Container(
+//          width: 1000,
+//          child: Column(
+//            mainAxisAlignment: MainAxisAlignment.start,
+//            crossAxisAlignment: CrossAxisAlignment.start,
+//            children: [
+//              RichText(
+//                text: TextSpan(
+//                  text: "Jocelyn Griselle,\n",
+//                  style: Theme.of(context).textTheme.headline3,
+//                  children: <TextSpan>[
+//                    TextSpan(
+//                      text: 'développeur ',
+//                      style: Theme.of(context).textTheme.headline3,
+//                    ),
+//                    TextSpan(
+//                      text: ' fullstack ', //' backend & mobile ',
+//                      style: Theme.of(context).textTheme.headline4,
+//                    ),
+//                  ],
+//                ),
+//              ),
+//              SizedBox(
+//                height: 30,
+//              ),
+//              Text(
+//                'Ingénieur en développement freelance, '
+//                'je suis basé à Nantes et disponible pour vos projets web et mobile.',
+//                style: Theme.of(context).textTheme.bodyText1,
+//              ),
+//            ],
+//          ),
+//        ),
+        SizedBox(
+          height: 50,
         ),
-
-    Expanded(child:
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Image(
-              image: AssetImage("images/blink.png"),
-              height: 92.0,
-              width: 92.0,
-            ),
-            Image(
-              image: AssetImage("images/blink.png"),
-              height: 92.0,
-              width: 92.0,
-            ),
-            Image(
-              image: AssetImage("images/blink.png"),
-              height: 92.0,
-              width: 92.0,
-            ),
-          ],
+        ServiceCardReverse(
+          title: 'Formation ',
+          titleHeadline: ' Web ',
+          image: 'images/mac.png',
+          description:
+              "Anonyme assembla ensemble des morceaux de texte pour réaliser"
+              " un livre spécimen de polices de texte.",
         ),
-    ),
+        SizedBox(
+          height: 50,
+        ),
+        ServiceCard(
+          title: 'Développement ',
+          titleHeadline: ' Mobile ',
+          image: 'images/iphone.png',
+          description:
+              "Anonyme assembla ensemble des morceaux de texte pour réaliser"
+              " un livre spécimen de polices de texte.",
+        ),
+        SizedBox(
+          height: 50,
+        ),
+        ServiceCardReverse(
+          title: ' Formation & \n',
+          titleHeadline: ' Enseignement ',
+          image: 'images/formation.png',
+          description:
+              "Anonyme assembla ensemble des morceaux de texte pour réaliser"
+              " un livre spécimen de polices de texte.",
+        ),
       ],
     );
   }
@@ -105,66 +105,227 @@ class ServicesContentMobile extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        CourseDetails(),
-      ],
+      children: <Widget>[],
     );
   }
 }
 
-class CourseDetails extends StatelessWidget {
+class ServiceCard extends StatelessWidget {
+  final String title;
+  final String titleHeadline;
+  final String description;
+  final String image;
+
+  ServiceCard({this.title, this.titleHeadline, this.description, this.image});
+
   @override
   Widget build(BuildContext context) {
-    return ResponsiveBuilder(builder: (context, sizingInformation) {
-      var textAlignment =
-          sizingInformation.deviceScreenType == DeviceScreenType.Desktop
-              ? TextAlign.left
-              : TextAlign.center;
-      double titleSize =
-          sizingInformation.deviceScreenType == DeviceScreenType.Mobile
-              ? 50
-              : 80;
-      double descriptionSize =
-          sizingInformation.deviceScreenType == DeviceScreenType.Mobile
-              ? 16
-              : 21;
-      return Container(
-        width: 300,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              "GREEZ\nMOBILE FIRST",
-              style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                  fontSize: titleSize,
-                  height: 0.9),
-              textAlign: textAlignment,
+    return Container(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            width: 400,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RichText(
+                  text: TextSpan(
+                    text: title,
+                    style: Theme.of(context).textTheme.headline3,
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: titleHeadline,
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Text(
+                  description,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.no_encryption,
+                      size: 18,
+                      color: Colors.blue,
+                    ),
+                    Text(
+                      ' Sécurisé',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.remove_red_eye,
+                      size: 18,
+                      color: Colors.pink,
+                    ),
+                    Text(
+                      ' User friendly',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.security,
+                      size: 18,
+                      color: Colors.orange,
+                    ),
+                    Text(
+                      ' RGPD',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+              ],
             ),
-            SizedBox(
-              height: 30,
+          ),
+          SizedBox(
+            width: 200,
+          ),
+          Center(
+            child: SizedBox(
+              height: 380,
+              width: 280,
+              child: Image.asset(
+                image,
+                alignment: Alignment.topCenter,
+              ),
             ),
-            Text(
-              'In this course we will go over the basics of using Flutter Web for website development. Topics will include Responsive Layout, Deploying, Font Changes, Hover Functionality, Modals and more.',
-              style: TextStyle(fontSize: descriptionSize, height: 1.7),
-              textAlign: textAlignment,
-            ),
-          ],
-        ),
-      );
-    });
+          ),
+          //CallToAction('Discutons'),
+        ],
+      ),
+    );
   }
 }
 
-class ImageDetails extends StatelessWidget {
+class ServiceCardReverse extends StatelessWidget {
+  final String title;
+  final String titleHeadline;
+  final String description;
+  final String image;
+
+  ServiceCardReverse(
+      {this.title, this.titleHeadline, this.description, this.image});
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        height: 380,
-        width: 280,
-        child: Image.asset('images/hello.png'),
+    return Container(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            width: 400,
+            child: Center(
+              child: SizedBox(
+                height: 380,
+                width: 280,
+                child: Image.asset(
+                  image,
+                  alignment: Alignment.topCenter,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 200,
+          ),
+          Container(
+            width: 400,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RichText(
+                  text: TextSpan(
+                    text: title,
+                    style: Theme.of(context).textTheme.headline3,
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: titleHeadline,
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Text(
+                  description,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.no_encryption,
+                      size: 18,
+                      color: Colors.blue,
+                    ),
+                    Text(
+                      ' Sécurisé',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.remove_red_eye,
+                      size: 18,
+                      color: Colors.pink,
+                    ),
+                    Text(
+                      ' User friendly',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.security,
+                      size: 18,
+                      color: Colors.orange,
+                    ),
+                    Text(
+                      ' RGPD',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+              ],
+            ),
+          ),
+
+          //CallToAction('Discutons'),
+        ],
       ),
     );
   }
