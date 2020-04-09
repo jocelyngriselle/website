@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import '../ui/buttons.dart';
 import '../ui/layout.dart';
+import '../ui/composants.dart';
 
 class ServicesPage extends StatelessWidget {
   @override
@@ -64,7 +64,7 @@ class ServicesContentDesktop extends StatelessWidget {
         ),
         ServiceCardReverse(
           title: 'Développement ',
-          titleHeadline: ' Web ',
+          titleHeadline: ' Backend ',
           image: 'images/mac.png',
           description:
               "Anonyme assembla ensemble des morceaux de texte pour réaliser"
@@ -151,47 +151,55 @@ class ServiceCard extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 SizedBox(
-                  height: 30,
+                  height: 10,
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Icon(
-                      Icons.no_encryption,
-                      size: 18,
-                      color: Colors.blue,
-                    ),
-                    Text(
-                      ' Sécurisé',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
+                    Skill(image: "images/python.png"),
+                    Skill(image: "images/django.png"),
+                    Skill(image: "images/scrapy.png"),
                   ],
                 ),
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.remove_red_eye,
-                      size: 18,
-                      color: Colors.pink,
-                    ),
-                    Text(
-                      ' User friendly',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.security,
-                      size: 18,
-                      color: Colors.orange,
-                    ),
-                    Text(
-                      ' RGPD',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ],
-                ),
+//                Row(
+//                  children: <Widget>[
+//                    Icon(
+//                      Icons.no_encryption,
+//                      size: 18,
+//                      color: Colors.blue,
+//                    ),
+//                    Text(
+//                      ' Sécurisé',
+//                      style: Theme.of(context).textTheme.bodyText1,
+//                    ),
+//                  ],
+//                ),
+//                Row(
+//                  children: <Widget>[
+//                    Icon(
+//                      Icons.remove_red_eye,
+//                      size: 18,
+//                      color: Colors.pink,
+//                    ),
+//                    Text(
+//                      ' User friendly',
+//                      style: Theme.of(context).textTheme.bodyText1,
+//                    ),
+//                  ],
+//                ),
+//                Row(
+//                  children: <Widget>[
+//                    Icon(
+//                      Icons.security,
+//                      size: 18,
+//                      color: Colors.orange,
+//                    ),
+//                    Text(
+//                      ' RGPD',
+//                      style: Theme.of(context).textTheme.bodyText1,
+//                    ),
+//                  ],
+//                ),
                 SizedBox(
                   height: 30,
                 ),
@@ -276,47 +284,55 @@ class ServiceCardReverse extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 SizedBox(
-                  height: 30,
+                  height: 10,
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Icon(
-                      Icons.no_encryption,
-                      size: 18,
-                      color: Colors.blue,
-                    ),
-                    Text(
-                      ' Sécurisé',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
+                    Skill(image: "images/dart.png"),
+                    Skill(image: "images/flutter.png"),
+                    Skill(image: "images/swift.png"),
                   ],
                 ),
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.remove_red_eye,
-                      size: 18,
-                      color: Colors.pink,
-                    ),
-                    Text(
-                      ' User friendly',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.security,
-                      size: 18,
-                      color: Colors.orange,
-                    ),
-                    Text(
-                      ' RGPD',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ],
-                ),
+//                Row(
+//                  children: <Widget>[
+//                    Icon(
+//                      Icons.no_encryption,
+//                      size: 18,
+//                      color: Colors.blue,
+//                    ),
+//                    Text(
+//                      ' Sécurisé',
+//                      style: Theme.of(context).textTheme.bodyText1,
+//                    ),
+//                  ],
+//                ),
+//                Row(
+//                  children: <Widget>[
+//                    Icon(
+//                      Icons.remove_red_eye,
+//                      size: 18,
+//                      color: Colors.pink,
+//                    ),
+//                    Text(
+//                      ' User friendly',
+//                      style: Theme.of(context).textTheme.bodyText1,
+//                    ),
+//                  ],
+//                ),
+//                Row(
+//                  children: <Widget>[
+//                    Icon(
+//                      Icons.security,
+//                      size: 18,
+//                      color: Colors.orange,
+//                    ),
+//                    Text(
+//                      ' RGPD',
+//                      style: Theme.of(context).textTheme.bodyText1,
+//                    ),
+//                  ],
+//                ),
                 SizedBox(
                   height: 30,
                 ),

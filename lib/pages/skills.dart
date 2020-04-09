@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:website/ui/layout.dart';
+import '../ui/composants.dart';
 
 class SkillsPage extends StatelessWidget {
   @override
@@ -294,23 +295,6 @@ class Skills extends StatelessWidget {
             ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-class Skill extends StatelessWidget {
-  final String image;
-
-  Skill({this.image});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        height: 100,
-        width: 100,
-        child: Image.asset(this.image),
       ),
     );
   }

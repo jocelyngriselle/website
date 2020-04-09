@@ -28,7 +28,7 @@ Widget getRoute(String name) {
         return SkillsPage();
       }
       break;
-    case "Portofolio":
+    case "Projets":
       {
         return PortofolioPage();
       }

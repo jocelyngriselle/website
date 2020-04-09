@@ -1,10 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:website/pages/skills.dart';
-import '../pages/home.dart';
-import '../pages/contact.dart';
-import '../pages/services.dart';
-import '../pages/portofolio.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../routes.dart';
@@ -61,15 +56,15 @@ class NavigationBarDesktop extends StatelessWidget {
               SizedBox(
                 width: 10,
               ),
+//              NavBarItem(
+//                'Compétences',
+//                key: UniqueKey(),
+//              ),
+//              SizedBox(
+//                width: 10,
+//              ),
               NavBarItem(
-                'Compétences',
-                key: UniqueKey(),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              NavBarItem(
-                'Portofolio',
+                'Projets',
                 key: UniqueKey(),
               ),
               SizedBox(
@@ -98,6 +93,9 @@ class NavigationBarDesktop extends StatelessWidget {
                           //fontWeight: FontWeight.w800,
                           //color: Colors.white,
                         ),
+                      ),
+                      SizedBox(
+                        width: 10,
                       ),
                       Icon(
                         FontAwesomeIcons.comment,
@@ -208,14 +206,7 @@ class NavBarItem extends StatelessWidget {
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 18,
-            //fontWeight: FontWeight.w800,
-            //color: Colors.white,
-          ),
-        ),
+        child: Text(title, style: Theme.of(context).textTheme.button),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
         ),
