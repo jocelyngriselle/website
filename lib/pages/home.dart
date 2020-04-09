@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-import 'layout.dart';
-import 'button.dart';
+import '../ui/layout.dart';
+import '../ui/buttons.dart';
 
 class HomePage extends StatelessWidget {
   @override

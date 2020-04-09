@@ -1,60 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:website/skills.dart';
-import 'home.dart';
-import 'contact.dart';
-import 'services.dart';
-import 'portofolio.dart';
+import 'package:website/pages/skills.dart';
+import '../pages/home.dart';
+import '../pages/contact.dart';
+import '../pages/services.dart';
+import '../pages/portofolio.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-Widget getRoute(String name) {
-  switch (name) {
-    case "Acceuil":
-      {
-        return HomePage();
-      }
-      break;
-    case "Contact":
-      {
-        return ContactPage();
-      }
-      break;
-    case "Services":
-      {
-        return ServicesPage();
-      }
-      break;
-    case "Compétences":
-      {
-        return SkillsPage();
-      }
-      break;
-    case "Portofolio":
-      {
-        return PortofolioPage();
-      }
-      break;
-  }
-}
-
-Route createRoute(String name) {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => getRoute(name),
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var textOpacity = Tween(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-          parent: ModalRoute.of(context).animation,
-          curve: Interval(0.0, 0.84, curve: Curves.linear),
-        ),
-      );
-      return FadeTransition(
-        opacity: textOpacity,
-        child: child,
-      );
-    },
-  );
-}
+import '../routes.dart';
 
 class NavigationBar extends StatelessWidget {
   const NavigationBar({Key key}) : super(key: key);
@@ -97,25 +50,35 @@ class NavigationBarDesktop extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          NavBarSocials(),
-          Row(
+          NavBarLogo(),
+          ButtonBar(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               NavBarItem(
                 'Services',
                 key: UniqueKey(),
               ),
+              SizedBox(
+                width: 10,
+              ),
               NavBarItem(
                 'Compétences',
                 key: UniqueKey(),
+              ),
+              SizedBox(
+                width: 10,
               ),
               NavBarItem(
                 'Portofolio',
                 key: UniqueKey(),
               ),
+              SizedBox(
+                width: 10,
+              ),
               OutlineButton(
                 borderSide: BorderSide(color: Theme.of(context).accentColor),
                 color: Theme.of(context).accentColor,
+                highlightedBorderColor: Theme.of(context).accentColor,
                 onPressed: () {
                   Navigator.of(context).push(
                     createRoute('Contact'),
@@ -124,15 +87,23 @@ class NavigationBarDesktop extends StatelessWidget {
                 child: Container(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  child: Text(
-                    "Contact",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
-                      color: Theme.of(context).accentColor,
-                      //fontWeight: FontWeight.w800,
-                      //color: Colors.white,
-                    ),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        "Contact ",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          color: Theme.of(context).accentColor,
+                          //fontWeight: FontWeight.w800,
+                          //color: Colors.white,
+                        ),
+                      ),
+                      Icon(
+                        FontAwesomeIcons.comment,
+                        color: Theme.of(context).accentColor,
+                      )
+                    ],
                   ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
@@ -218,7 +189,7 @@ class NavigationDrawer extends StatelessWidget {
   }
 }
 
-class NavBarItem extends StatefulWidget {
+class NavBarItem extends StatelessWidget {
   final String title;
 
   const NavBarItem(
@@ -227,50 +198,18 @@ class NavBarItem extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _NavBarItemState createState() => _NavBarItemState();
-}
-
-class _NavBarItemState extends State<NavBarItem> {
-  bool _selected = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _selected = false;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    //print(widget.title);
-    //print(_selected);
-//    return InkWell(
-//      borderRadius: BorderRadius.circular(5.0),
-//      onTap: () {
-//        Navigator.of(context).push(createRoute(widget.title));
-//      },
-//      child: Container(
-//        padding: EdgeInsets.fromLTRB(30, 15, 30, 15),
-//        child: Text(
-//          widget.title,
-//          style: TextStyle(
-//            fontSize: _selected ? 18 : 18,
-//            color: Colors.black,
-//
-//          ),
-//        ),
-//      ),
-//    );
     return FlatButton(
       //color: Color.fromARGB(255, 31, 229, 146),
       onPressed: () {
         Navigator.of(context).push(
-          createRoute(widget.title),
+          createRoute(title),
         );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
         child: Text(
-          widget.title,
+          title,
           style: TextStyle(
             fontSize: 18,
             //fontWeight: FontWeight.w800,
@@ -289,58 +228,16 @@ class NavBarLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 180,
-      width: 180,
-      child: Image.asset('images/blink.png'),
-    );
-  }
-}
-
-class NavBarSocials extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        SizedBox(
-          height: 45,
-          width: 45,
-          child: InkResponse(
-            onTap: () {
-              Navigator.of(context).push(
-                createRoute('Acceuil'),
-              );
-            },
-            child: Image.asset('images/logo.png'),
-          ),
-        ),
-//        SizedBox(
-//          width: 10,
-//        ),
-//        Text(
-//          'Jocelyn Griselle',
-//          style: TextStyle(
-//              color: Theme.of(context).accentColor,
-//              fontFamily: 'Open sans',
-//              fontSize: 24),
-//        )
-
-//        IconButton(
-//          icon: Icon(FontAwesomeIcons.twitter),
-//          onPressed: () {},
-//        ),
-//        IconButton(
-//          icon: Icon(FontAwesomeIcons.linkedin),
-//          onPressed: () {},
-//        ),
-//        IconButton(
-//          icon: Icon(FontAwesomeIcons.medium),
-//          onPressed: () {},
-//        ),
-//        IconButton(
-//          icon: Icon(FontAwesomeIcons.github),
-//          onPressed: () {},
-//        ),
-      ],
+      height: 45,
+      width: 45,
+      child: InkResponse(
+        onTap: () {
+          Navigator.of(context).push(
+            createRoute('Acceuil'),
+          );
+        },
+        child: Image.asset('images/logo.png'),
+      ),
     );
   }
 }

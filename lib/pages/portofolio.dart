@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 
-import 'navigation.dart';
-import 'layout.dart';
-import 'footer.dart';
+import '../ui/navigation.dart';
+import '../ui/layout.dart';
+import '../ui/footer.dart';
 
 class PortofolioPage extends StatelessWidget {
   @override

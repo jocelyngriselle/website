@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'button.dart';
-import 'layout.dart';
+import '../ui/buttons.dart';
+import '../ui/layout.dart';
 
 class ServicesPage extends StatelessWidget {
   @override
@@ -63,7 +63,7 @@ class ServicesContentDesktop extends StatelessWidget {
           height: 50,
         ),
         ServiceCardReverse(
-          title: 'Formation ',
+          title: 'Développement ',
           titleHeadline: ' Web ',
           image: 'images/mac.png',
           description:

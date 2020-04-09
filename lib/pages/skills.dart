@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'button.dart';
-import 'layout.dart';
+import 'package:website/ui/layout.dart';
 
 class SkillsPage extends StatelessWidget {
   @override

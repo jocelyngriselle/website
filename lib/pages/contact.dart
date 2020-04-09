@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'layout.dart';
+import '../ui/layout.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dart:html';
 
 class ContactPage extends StatelessWidget {
   @override
@@ -8,7 +10,50 @@ class ContactPage extends StatelessWidget {
       content: Row(
         children: <Widget>[
           Expanded(
-            child: ImageDetails(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    //Text("Conditions d'utilisation"),
+                    IconButton(
+                      icon: Icon(FontAwesomeIcons.twitter),
+                      onPressed: () {
+                        window.open(
+                            'https://twitter.com/jocelyngriselle/', 'twitter');
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(FontAwesomeIcons.linkedin),
+                      onPressed: () {
+                        window.open(
+                            'https://www.linkedin.com/in/jocelyngriselle/',
+                            'linkedin');
+                      },
+                    ),
+//                IconButton(
+//                  icon: Icon(FontAwesomeIcons.medium),
+//                  onPressed: () {},
+//                ),
+                    IconButton(
+                      icon: Icon(FontAwesomeIcons.github),
+                      onPressed: () {
+                        window.open(
+                            'https://github.com/jocelyngriselle/', 'github');
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 380,
+                  width: 280,
+                  child: Image.asset('images/contact.png'),
+                ),
+              ],
+            ),
           ),
           ContactForm(),
         ],

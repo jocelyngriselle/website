@@ -45,9 +45,7 @@ class Layout extends StatelessWidget {
 //          ),
               ),
               Container(
-                color: Colors.blue,
-                height: size.height + 600,
-                //padding: const EdgeInsets.symmetric(horizontal: 70.0),
+                padding: const EdgeInsets.symmetric(horizontal: 70.0),
                 alignment: Alignment.topCenter,
                 child: Column(
                   children: <Widget>[
@@ -65,10 +63,10 @@ class Layout extends StatelessWidget {
                         ),
                       ),
                     ),
-                    ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 1200),
-                      child: footer,
-                    ),
+//                    ConstrainedBox(
+//                      constraints: BoxConstraints(maxWidth: 1200),
+//                      child: footer,
+//                    ),
                   ],
                 ),
               ),

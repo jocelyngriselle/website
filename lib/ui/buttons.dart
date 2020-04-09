@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'navigation.dart';
+import '../routes.dart';
 
 class CallToActionDesktop extends StatelessWidget {
   final String title;
