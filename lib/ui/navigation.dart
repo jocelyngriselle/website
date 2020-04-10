@@ -219,8 +219,8 @@ class NavBarLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 45,
-      width: 45,
+      height: 55,
+      width: 55,
       child: InkResponse(
         onTap: () {
           Navigator.of(context).push(

@@ -19,12 +19,12 @@ class AnimationsPlayground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Layout(
-      navbar: AnimatedNavbar(), // AnimatedNavbar
+      navbar: AnimatedNavbar(),
       content: ScreenTypeLayout(
           desktop: DesktopAnimatedApp(),
           tablet: MobileAnimatedApp(),
           mobile: MobileAnimatedApp()),
-      footer: AnimatedFooter(),
+      //footer: AnimatedFooter(),
     );
   }
 }
@@ -64,7 +64,7 @@ class _DesktopAnimatedAppState extends State<DesktopAnimatedApp>
     imageOpacity = Tween(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: controller,
-        curve: Interval(0.2, 0.45, curve: Curves.easeIn),
+        curve: Interval(0.0, 0.45, curve: Curves.easeIn),
       ),
     );
     textTranslation = Tween(

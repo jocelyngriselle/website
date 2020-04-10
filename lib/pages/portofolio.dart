@@ -1,9 +1,12 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../ui/layout.dart';
 import '../ui/composants.dart';
+import '../ui/navigation.dart';
 
 class PortofolioPage extends StatelessWidget {
   @override
@@ -11,7 +14,7 @@ class PortofolioPage extends StatelessWidget {
     return Page(
       content: ScreenTypeLayout(
         desktop: PortofolioContentDesktop(),
-        //tablet: ServicesContentMobile(),
+        tablet: PortofolioContentDesktop(),
         //mobile: ServicesContentMobile(),
       ),
     );
@@ -38,44 +41,68 @@ class PortofolioContentMobile extends StatelessWidget {
 class PortofolioContentDesktop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Expanded(
-              child: Project(
-                project: valoo,
-              ),
+    return Container(
+      constraints: BoxConstraints(maxHeight: 800),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Expanded(
+                  flex: 4,
+                  child: Project(
+                    project: valoo,
+                  ),
+                ),
+                SizedBox(
+                  width: 50,
+                ),
+                Expanded(
+                  flex: 5,
+                  child: Project(
+                    project: mixity,
+                  ),
+                ),
+              ],
             ),
-            Expanded(
-              child: Project(
-                project: mixity,
-              ),
+          ),
+          SizedBox(
+            height: 50,
+          ),
+          Expanded(
+            flex: 1,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Expanded(
+                  flex: 5,
+                  child: Project(
+                    project: openClassroom,
+                  ),
+                ),
+                SizedBox(
+                  width: 50,
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Project(
+                    project: creative,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-        SizedBox(
-          height: 50,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Expanded(
-              child: Project(
-                project: unknown,
-              ),
-            ),
-            Expanded(
-              child: Project(
-                project: creative,
-              ),
-            ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -92,27 +119,81 @@ class Project extends StatefulWidget {
 class ProjectState extends State<Project> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      radius: 1200.0,
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ProjectDetail(
-            project: widget.project,
-          ),
-        ),
-      ),
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Hero(
-          tag: "avatar_" + widget.project.id.toString(),
-          child: Image.asset(
-            widget.project.image,
-            height: 280,
-          ),
-        ),
-      ),
+    return Semantics(
+      container: true,
+      child: new Container(
+          margin: const EdgeInsets.all(4.0),
+          child: Material(
+            shadowColor: Colors.grey.shade400, // added
+            color: Colors.transparent,
+            type: MaterialType.card,
+            elevation: 3,
+            child: InkWell(
+              radius: 1200.0,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProjectDetail(
+                    project: widget.project,
+                  ),
+                ),
+              ),
+              child: Container(
+                padding: EdgeInsets.all(50),
+                child: Hero(
+                  tag: "avatar_" + widget.project.id.toString(),
+                  child: Image.asset(
+                    widget.project.image,
+                    height: 280,
+                  ),
+                ),
+              ),
+            ),
+            borderRadius: new BorderRadius.circular(15.0), // added
+          )),
     );
+
+//    return Card(
+//      //color: Colors.grey.shade200,
+//      borderOnForeground: false,
+//      elevation: 1,
+//      //shape: RoundedRectangleBorder(
+//      //  borderRadius: BorderRadius.circular(15.0),
+//      //),
+//      child: Container(
+//        //color: Colors.transparent,
+////        decoration: BoxDecoration(
+////          boxShadow: <BoxShadow>[
+////            BoxShadow(
+////              color: Colors.grey.withOpacity(0.1),
+////              blurRadius: 1,
+////              offset: Offset(0, 2),
+////            ),
+////          ],
+////        ),
+//        child: InkWell(
+//          radius: 1200.0,
+//          onTap: () => Navigator.push(
+//            context,
+//            MaterialPageRoute(
+//              builder: (context) => ProjectDetail(
+//                project: widget.project,
+//              ),
+//            ),
+//          ),
+//          child: Container(
+//            padding: EdgeInsets.all(50),
+//            child: Hero(
+//              tag: "avatar_" + widget.project.id.toString(),
+//              child: Image.asset(
+//                widget.project.image,
+//                height: 280,
+//              ),
+//            ),
+//          ),
+//        ),
+//      ),
+//    );
   }
 }
 
@@ -123,17 +204,11 @@ class ProjectDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Retour",
-          style: TextStyle(color: Colors.black),
-        ),
-        backgroundColor: Colors.transparent,
-        iconTheme: IconThemeData(color: Colors.black),
-        elevation: 0.0,
-      ),
-      body: Container(
+    return Layout(
+      navbar: HeroNavBar(
+        project: project,
+      ), // AnimatedNavbar
+      content: Container(
         padding: const EdgeInsets.symmetric(horizontal: 70.0),
         child: Center(
           child: SingleChildScrollView(
@@ -163,6 +238,68 @@ class ProjectDetail extends StatelessWidget {
         ),
       ),
     );
+
+//
+//
+//    return Scaffold(
+//      appBar: PreferredSize(
+//        preferredSize: Size(1200, 70),
+//        child: Hero(
+//          tag: AppBar,
+//          child: AppBar(
+//            backgroundColor: Colors.transparent,
+////            title: Text(
+////              "Retour",
+////              style: TextStyle(color: Colors.black),
+////            ),
+//            iconTheme: IconThemeData(color: Colors.black),
+//            elevation: 0.0,
+//            leading: const BackButton(),
+//            actions: <Widget>[
+//              IconButton(
+//                icon: const Icon(Icons.add_alert),
+//                tooltip: 'Show Snackbar',
+//                onPressed: () {},
+//              ),
+//              IconButton(
+//                icon: const Icon(Icons.navigate_next),
+//                tooltip: 'Next page',
+//                onPressed: () {},
+//              ),
+//            ],
+//          ),
+//        ),
+//      ),
+//      body: Container(
+//        padding: const EdgeInsets.symmetric(horizontal: 70.0),
+//        child: Center(
+//          child: SingleChildScrollView(
+//            child: ConstrainedBox(
+//              constraints: BoxConstraints(
+//                maxWidth: 1200,
+//              ),
+//              child: Column(
+//                children: <Widget>[
+//                  Container(
+//                    //color: Colors.pink,
+//                    child: ProjectRow(
+//                      project: project,
+//                    ),
+//                  ),
+//                  SizedBox(
+//                    height: 50,
+//                  ),
+//                  TestimonyRow(
+//                    project: project,
+//                  ),
+//                ],
+//                // ),
+//              ),
+//            ),
+//          ),
+//        ),
+//      ),
+//    );
   }
 }
 
@@ -197,7 +334,9 @@ class ProjectRow extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: Hero(
                   tag: "avatar_" + project.id.toString(),
-                  child: Image.asset(project.image),
+                  child: Image.asset(
+                    project.image,
+                  ),
                 ),
               ),
             ),
@@ -273,8 +412,15 @@ class TestimonyRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 25),
       width: 900,
-      //color: Colors.deepPurpleAccent,
+      decoration: new BoxDecoration(
+          color: Theme.of(context).backgroundColor,
+          borderRadius: new BorderRadius.only(
+            bottomRight: const Radius.circular(15.0),
+            topLeft: const Radius.circular(15.0),
+          )),
+      //color: Color.fromRGBO(242, 255, 243, 0.8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -291,11 +437,11 @@ class TestimonyRow extends StatelessWidget {
                   child: Image.asset(project.testimonyImage),
                 ),
                 Text(
-                  project.testimonyName,
+                  " ${project.testimonyName}",
                   style: Theme.of(context).textTheme.headline5,
                 ),
                 Text(
-                  project.testimonyJob,
+                  " ${project.testimonyJob} ",
                   style: Theme.of(context).textTheme.headline6,
                 )
               ],
@@ -328,6 +474,7 @@ class TestimonyRow extends StatelessWidget {
                   Text(
                     project.testimonyDescription,
                     style: Theme.of(context).textTheme.caption,
+                    textAlign: TextAlign.left,
                   ),
                   Align(
                     alignment: Alignment.bottomRight,
@@ -349,6 +496,132 @@ class TestimonyRow extends StatelessWidget {
   }
 }
 
+class HeroNavBar extends StatelessWidget {
+  final ProjectModel project;
+
+  HeroNavBar({this.project});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 100,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          ButtonBar(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              BackButton(),
+              Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                child: Text(project.role,
+                    style: Theme.of(context).textTheme.overline),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+              Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                child: Text("-", style: Theme.of(context).textTheme.overline),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+              Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                child: Text(project.status,
+                    style: Theme.of(context).textTheme.overline),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+              Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                child: Text("-", style: Theme.of(context).textTheme.overline),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+              Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                child: Text(project.duration,
+                    style: Theme.of(context).textTheme.overline),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+              Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                child: Text("-", style: Theme.of(context).textTheme.overline),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+              Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                child: Text(project.location,
+                    style: Theme.of(context).textTheme.overline),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+            ],
+          ),
+          project.canVisit
+              ? ButtonBar(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    OutlineButton(
+                      borderSide:
+                          BorderSide(color: Theme.of(context).accentColor),
+                      color: Theme.of(context).accentColor,
+                      highlightedBorderColor: Theme.of(context).accentColor,
+                      onPressed: () {
+                        window.open(project.url, 'url');
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 15),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              "Visiter",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
+                                color: Theme.of(context).accentColor,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Icon(
+                              FontAwesomeIcons.eye,
+                              color: Theme.of(context).accentColor,
+                            )
+                          ],
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : Container(),
+        ],
+      ),
+    );
+  }
+}
+
 class ProjectModel {
   final String description;
   final int id;
@@ -360,6 +633,12 @@ class ProjectModel {
   final String testimonyImage;
   final String testimonyDescription;
   final List<String> skills;
+  final bool canVisit;
+  final String role;
+  final String status;
+  final String duration;
+  final String location;
+  final String url;
 
   ProjectModel({
     this.id,
@@ -372,6 +651,12 @@ class ProjectModel {
     this.testimonyJob,
     this.testimonyName,
     this.skills,
+    this.canVisit,
+    this.role,
+    this.status,
+    this.duration,
+    this.location,
+    this.url,
   });
 }
 
@@ -402,12 +687,17 @@ final valoo = ProjectModel(
     "images/scrapy.png",
     "images/docker.png",
   ],
+  canVisit: false,
+  role: "Développeur Backend",
+  duration: "2 ans",
+  location: "Nantes",
+  status: "CDI",
 );
 
 final mixity = ProjectModel(
   id: 2,
   name: 'Fullstack for',
-  headlineName: 'good',
+  headlineName: 'Good',
   image: 'images/mixity.png',
   description: "Mixity est la première plateforme digitale qui "
       "restitue l’impact global diversité et inclusion des "
@@ -416,7 +706,7 @@ final mixity = ProjectModel(
       " RSE : Genre - Handicap - Multi-culturel - Multi-générationnel"
       " - LGBT+, pour générer une Empreinte diversité et inclusion "
       "propre à chaque organisation.",
-  testimonyName: "Sandrine Charpentier",
+  testimonyName: "Sandrine\n Charpentier",
   testimonyJob: "CEO @ Mixity",
   testimonyImage: "images/charpentier.png",
   testimonyDescription:
@@ -431,43 +721,53 @@ final mixity = ProjectModel(
     "images/python.png",
     "images/django.png",
     "images/heroku.png",
+    "images/javascript.png",
   ],
+  canVisit: true,
+  role: "Développeur Fullstack",
+  duration: "6 mois",
+  location: "Nantes",
+  status: "Freelance",
+  url: "https://www.mixity.co/",
 );
 
-final unknown = ProjectModel(
+final openClassroom = ProjectModel(
   id: 3,
-  name: 'fgtretre',
-  headlineName: 'rtett',
-  image: 'images/mac.png',
-  description: "Mixity est la première plateforme digitale qui "
-      "restitue l’impact global diversité et inclusion des "
-      "entreprises, écoles, collectivités, associations...\n"
-      "Mixity s’appuie sur un référentiel reposant sur 5 thèmes"
-      " RSE : Genre - Handicap - Multi-culturel - Multi-générationnel"
-      " - LGBT+, pour générer une Empreinte diversité et inclusion "
-      "propre à chaque organisation.",
-  testimonyName: "Sandrine Charpentier",
-  testimonyJob: "CEO @ Mixity",
-  testimonyImage: "images/charpentier.png",
+  name: 'Cours à ciel',
+  headlineName: 'Ouvert',
+  image: 'images/openclassroom.png',
+  description:
+      "OpenClassrooms est un site web de formation en ligne qui propose"
+      " à ses membres des cours certifiants et des parcours débouchant sur des "
+      "métiers en croissance. Ses contenus sont réalisés en interne, par des "
+      "écoles, des universités, des entreprises partenaires comme Microsoft ou "
+      "IBM, ou historiquement par des bénévoles.",
+  testimonyName: "Bela Remes",
+  testimonyJob: "Etudiant @ OC",
+  testimonyImage: "images/remes.png",
   testimonyDescription:
-      "Jocelyn est venu renforcer notre équipe back-office Python/"
-      "Django et a su rapidement prendre en main notre serveur"
-      " de produits. Son goût pour la découverte de nouvelles "
-      "technologies ( Scrapy, Docker, ELK, VueJS ) fait de lui "
-      "un explorateur avisé."
-      "\nSes talents de développeur et sa bonne humeur lui "
-      "présagent un bel avenir dans le freelance !",
+      "Jocelyn est un excellent professeur Jocelyn est un excellent professeur"
+      "Jocelyn est un excellent professeurJocelyn est un excellent professeur"
+      "Jocelyn est un excellent professeur Jocelyn est un excellent professeur"
+      "Jocelyn est un excellent professeur Jocelyn est un excellent professeur"
+      "Jocelyn est un excellent professeur Jocelyn est un excellent professeur"
+      "Jocelyn est un excellent professeur",
   skills: [
-    "images/dart.png",
-    "images/flutter.png",
-    "images/firebase.png",
+    "images/python.png",
+    "images/django.png",
+    "images/postgresql.png",
   ],
+  canVisit: false,
+  role: "Mentor Parcours Python",
+  duration: "6 mois",
+  location: "Télétravail",
+  status: "Freelance",
 );
 
 final creative = ProjectModel(
   id: 4,
   name: 'Oblique',
-  headlineName: 'strategies',
+  headlineName: 'Strategies',
   image: 'images/creative.png',
   description: 'Les cartes « stratégies obliques » ont été '
       'développées en anglais, et de nombreuses applications '
@@ -477,17 +777,21 @@ final creative = ProjectModel(
   testimonyName: "DJ Izem",
   testimonyJob: "Music Producer",
   testimonyImage: "images/kerouanton.png",
-  testimonyDescription: 'Ingénieur en développement freelance, '
-      "Jocelyn est venu renforcer notre équipe back-office Python/"
-      "Django et a su rapidement prendre en main notre serveur"
-      " de produits. Son goût pour la découverte de nouvelles "
-      "technologies ( Scrapy, Docker, ELK, VueJS ) fait de lui "
-      "un explorateur avisé."
-      "\nSes talents de développeur et sa bonne humeur lui "
-      "présagent un bel avenir dans le freelance !",
+  testimonyDescription:
+      "J’ai fait appel à Jocelyn pour superviser le développement"
+      " de mon projet d’application Creative Hacks. La communication s’est "
+      "révélée très fluide et j’ai apprécié le soin qu’il a porté à comprendre "
+      "le problème en profondeur. Il a confirmé cette première bonne impression "
+      "en fournissant un travail de développement rapide, efficace et détaillé, "
+      "totalement en accord avec mes attentes.",
   skills: [
     "images/dart.png",
     "images/flutter.png",
     "images/firebase.png",
   ],
+  canVisit: false,
+  role: "Développeur Mobile",
+  duration: "2 mois",
+  location: "Télétravail",
+  status: "Freelance",
 );
