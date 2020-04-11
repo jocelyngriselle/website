@@ -3,7 +3,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'home.dart';
 import '../ui/navigation.dart';
 import '../ui/layout.dart';
-import '../ui/footer.dart';
+import '../ui/composants.dart';
 
 class AnimationsPlayground extends StatelessWidget {
   static Route<dynamic> route() {
@@ -104,7 +104,7 @@ class _DesktopAnimatedAppState extends State<DesktopAnimatedApp>
               translation: textTranslation.value,
               child: FadeTransition(
                 opacity: textOpacity,
-                child: CourseDetails(),
+                child: Headline1Section(),
               ),
             ),
             Expanded(
@@ -190,49 +190,6 @@ class _MobileAnimatedAppState extends State<MobileAnimatedApp>
               ),
             ),
           ),
-          footer: AnimatedFooter(),
-        );
-      },
-    );
-  }
-}
-
-class AnimatedFooter extends StatefulWidget {
-  @override
-  AnimatedFooterState createState() => AnimatedFooterState();
-}
-
-class AnimatedFooterState extends State<AnimatedFooter>
-    with SingleTickerProviderStateMixin {
-  AnimationController controller;
-  Animation<Offset> footerTranslation;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = AnimationController(
-      duration: const Duration(seconds: 3),
-      vsync: this,
-    )..forward();
-    footerTranslation = Tween(
-      begin: Offset(0.0, 5.0),
-      end: Offset(0.0, 0.0),
-    ).animate(
-      CurvedAnimation(
-        parent: controller,
-        curve: Interval(0.8, 1.0, curve: Curves.easeIn),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: controller,
-      builder: (BuildContext context, Widget child) {
-        return FractionalTranslation(
-          translation: footerTranslation.value,
-          child: Footer(),
         );
       },
     );

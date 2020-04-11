@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../routes.dart';
+import '../ui/theme.dart';
 
 class NavigationBar extends StatelessWidget {
   const NavigationBar({Key key}) : super(key: key);
@@ -21,7 +22,7 @@ class NavigationBarMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
+      height: navBarSize, // TODO too much height ?
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -41,7 +42,7 @@ class NavigationBarDesktop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
+      height: navBarSize,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

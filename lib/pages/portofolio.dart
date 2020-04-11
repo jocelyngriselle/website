@@ -6,7 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../ui/layout.dart';
 import '../ui/composants.dart';
-import '../ui/navigation.dart';
+import '../ui/theme.dart';
 
 class PortofolioPage extends StatelessWidget {
   @override
@@ -42,64 +42,19 @@ class PortofolioContentDesktop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxHeight: 800),
+      constraints: BoxConstraints(maxHeight: maxWidth),
       child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(
-                  flex: 4,
-                  child: Project(
-                    project: valoo,
-                  ),
-                ),
-                SizedBox(
-                  width: 50,
-                ),
-                Expanded(
-                  flex: 5,
-                  child: Project(
-                    project: mixity,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: 50,
+          Headline2Section(
+            name: 'Selection de',
+            headlineName: 'Projets',
+            description: 'Une selection des projets réalisés par moi et '
+                'seulement parce que je suis énorme et trop bon',
           ),
           Expanded(
-            flex: 1,
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(
-                  flex: 5,
-                  child: Project(
-                    project: openClassroom,
-                  ),
-                ),
-                SizedBox(
-                  width: 50,
-                ),
-                Expanded(
-                  flex: 4,
-                  child: Project(
-                    project: creative,
-                  ),
-                ),
-              ],
-            ),
+            child: Projects(),
           ),
         ],
       ),
@@ -107,9 +62,74 @@ class PortofolioContentDesktop extends StatelessWidget {
   }
 }
 
+class Projects extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Expanded(
+          flex: 1,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Expanded(
+                flex: 4,
+                child: Project(
+                  project: valoo,
+                ),
+              ),
+              SizedBox(
+                width: 50,
+              ),
+              Expanded(
+                flex: 5,
+                child: Project(
+                  project: mixity,
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 50,
+        ),
+        Expanded(
+          flex: 1,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Expanded(
+                flex: 5,
+                child: Project(
+                  project: openClassroom,
+                ),
+              ),
+              SizedBox(
+                width: 50,
+              ),
+              Expanded(
+                flex: 4,
+                child: Project(
+                  project: creative,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class Project extends StatefulWidget {
   final ProjectModel project;
-
   Project({this.project});
 
   @override
@@ -119,87 +139,49 @@ class Project extends StatefulWidget {
 class ProjectState extends State<Project> {
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      container: true,
-      child: new Container(
-          margin: const EdgeInsets.all(4.0),
-          child: Material(
-            shadowColor: Colors.grey.shade400, // added
-            color: Colors.transparent,
-            type: MaterialType.card,
-            elevation: 3,
-            child: InkWell(
-              radius: 1200.0,
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProjectDetail(
-                    project: widget.project,
+    return Container(
+      //height: 900,
+      color: Colors.blue,
+      //constraints: BoxConstraints(minHeight: 1500, minWidth: 500),
+      child: Semantics(
+        container: true,
+        child: new Container(
+            margin: const EdgeInsets.all(4.0),
+            child: Material(
+              shadowColor: Colors.grey.shade400, // added
+              color: Colors.transparent,
+              type: MaterialType.card,
+              elevation: 3,
+              child: InkWell(
+                radius: 1200.0,
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProjectDetail(
+                      project: widget.project,
+                    ),
+                  ),
+                ),
+                child: Container(
+                  padding: EdgeInsets.all(50),
+                  child: Hero(
+                    tag: "avatar_" + widget.project.id.toString(),
+                    child: Image.asset(
+                      widget.project.image,
+                      height: 280,
+                    ),
                   ),
                 ),
               ),
-              child: Container(
-                padding: EdgeInsets.all(50),
-                child: Hero(
-                  tag: "avatar_" + widget.project.id.toString(),
-                  child: Image.asset(
-                    widget.project.image,
-                    height: 280,
-                  ),
-                ),
-              ),
-            ),
-            borderRadius: new BorderRadius.circular(15.0), // added
-          )),
+              borderRadius: new BorderRadius.circular(15.0), // added
+            )),
+      ),
     );
-
-//    return Card(
-//      //color: Colors.grey.shade200,
-//      borderOnForeground: false,
-//      elevation: 1,
-//      //shape: RoundedRectangleBorder(
-//      //  borderRadius: BorderRadius.circular(15.0),
-//      //),
-//      child: Container(
-//        //color: Colors.transparent,
-////        decoration: BoxDecoration(
-////          boxShadow: <BoxShadow>[
-////            BoxShadow(
-////              color: Colors.grey.withOpacity(0.1),
-////              blurRadius: 1,
-////              offset: Offset(0, 2),
-////            ),
-////          ],
-////        ),
-//        child: InkWell(
-//          radius: 1200.0,
-//          onTap: () => Navigator.push(
-//            context,
-//            MaterialPageRoute(
-//              builder: (context) => ProjectDetail(
-//                project: widget.project,
-//              ),
-//            ),
-//          ),
-//          child: Container(
-//            padding: EdgeInsets.all(50),
-//            child: Hero(
-//              tag: "avatar_" + widget.project.id.toString(),
-//              child: Image.asset(
-//                widget.project.image,
-//                height: 280,
-//              ),
-//            ),
-//          ),
-//        ),
-//      ),
-//    );
   }
 }
 
 class ProjectDetail extends StatelessWidget {
   final ProjectModel project;
-
   ProjectDetail({this.project});
 
   @override
@@ -208,105 +190,31 @@ class ProjectDetail extends StatelessWidget {
       navbar: HeroNavBar(
         project: project,
       ), // AnimatedNavbar
-      content: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 70.0),
-        child: Center(
-          child: SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxWidth: 1200,
-              ),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    //color: Colors.pink,
-                    child: ProjectRow(
-                      project: project,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 50,
-                  ),
-                  TestimonyRow(
-                    project: project,
-                  ),
-                ],
-                // ),
-              ),
+      content: Column(
+        children: <Widget>[
+          Container(
+            //color: Colors.pink,
+            child: ProjectDetailRow(
+              project: project,
             ),
           ),
-        ),
+          SizedBox(
+            height: 50,
+          ),
+          TestimonyRow(
+            project: project,
+          ),
+        ],
+        // ),
       ),
     );
-
-//
-//
-//    return Scaffold(
-//      appBar: PreferredSize(
-//        preferredSize: Size(1200, 70),
-//        child: Hero(
-//          tag: AppBar,
-//          child: AppBar(
-//            backgroundColor: Colors.transparent,
-////            title: Text(
-////              "Retour",
-////              style: TextStyle(color: Colors.black),
-////            ),
-//            iconTheme: IconThemeData(color: Colors.black),
-//            elevation: 0.0,
-//            leading: const BackButton(),
-//            actions: <Widget>[
-//              IconButton(
-//                icon: const Icon(Icons.add_alert),
-//                tooltip: 'Show Snackbar',
-//                onPressed: () {},
-//              ),
-//              IconButton(
-//                icon: const Icon(Icons.navigate_next),
-//                tooltip: 'Next page',
-//                onPressed: () {},
-//              ),
-//            ],
-//          ),
-//        ),
-//      ),
-//      body: Container(
-//        padding: const EdgeInsets.symmetric(horizontal: 70.0),
-//        child: Center(
-//          child: SingleChildScrollView(
-//            child: ConstrainedBox(
-//              constraints: BoxConstraints(
-//                maxWidth: 1200,
-//              ),
-//              child: Column(
-//                children: <Widget>[
-//                  Container(
-//                    //color: Colors.pink,
-//                    child: ProjectRow(
-//                      project: project,
-//                    ),
-//                  ),
-//                  SizedBox(
-//                    height: 50,
-//                  ),
-//                  TestimonyRow(
-//                    project: project,
-//                  ),
-//                ],
-//                // ),
-//              ),
-//            ),
-//          ),
-//        ),
-//      ),
-//    );
   }
 }
 
-class ProjectRow extends StatelessWidget {
+class ProjectDetailRow extends StatelessWidget {
   final ProjectModel project;
 
-  ProjectRow({this.project});
+  ProjectDetailRow({this.project});
 
   @override
   Widget build(BuildContext context) {
@@ -394,11 +302,9 @@ class ProjectDescription extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
-        Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: project.skills
-                .map((skill) => new Skill(image: skill))
-                .toList()),
+        SkillBar(
+          skills: project.skills,
+        )
       ],
     );
   }

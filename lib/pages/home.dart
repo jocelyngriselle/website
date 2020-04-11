@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-
 import '../ui/layout.dart';
-import '../ui/buttons.dart';
+import '../ui/composants.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -22,7 +21,7 @@ class HomeContentDesktop extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        CourseDetails(),
+        Headline1Section(),
         Expanded(
           child: ImageDetails(),
         )
@@ -40,67 +39,9 @@ class HomeContentMobile extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        CourseDetails(),
+        Headline1Section(),
       ],
     );
-  }
-}
-
-class CourseDetails extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ResponsiveBuilder(builder: (context, sizingInformation) {
-      var textAlignment =
-          sizingInformation.deviceScreenType == DeviceScreenType.Desktop
-              ? TextAlign.left
-              : TextAlign.center;
-      double titleSize =
-          sizingInformation.deviceScreenType == DeviceScreenType.Mobile
-              ? 50
-              : 50;
-      double descriptionSize =
-          sizingInformation.deviceScreenType == DeviceScreenType.Mobile
-              ? 16
-              : 21;
-      return Container(
-        width: 600,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            RichText(
-              text: TextSpan(
-                text: "Jocelyn Griselle,\n",
-                style: Theme.of(context).textTheme.headline1,
-                children: <TextSpan>[
-                  TextSpan(
-                    text: 'développeur ',
-                    style: Theme.of(context).textTheme.headline1,
-                  ),
-                  TextSpan(
-                    text: ' fullstack ', //' backend & mobile ',
-                    style: Theme.of(context).textTheme.headline2,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Text(
-              'Ingénieur en développement freelance, '
-              'je suis basé à Nantes et disponible pour vos projets web et mobile.',
-              style: Theme.of(context).textTheme.bodyText1,
-              textAlign: textAlignment,
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            CallToAction('Discutons'),
-          ],
-        ),
-      );
-    });
   }
 }
 

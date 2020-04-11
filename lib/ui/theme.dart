@@ -90,3 +90,9 @@ class MyTheme {
     );
   }
 }
+
+const marginRight = 70.0;
+const marginLeft = 70.0;
+const footerSize = 80.0;
+const navBarSize = 80.0;
+const maxWidth = 1200.0;

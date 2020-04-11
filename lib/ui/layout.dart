@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'navigation.dart';
-import 'footer.dart';
+import 'theme.dart';
 
 class Layout extends StatelessWidget {
   final Widget content;
-  final Widget footer;
   final Widget navbar;
-  const Layout({Key key, this.content, this.navbar, this.footer})
-      : super(key: key);
+  const Layout({
+    Key key,
+    this.content,
+    this.navbar,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,20 +47,32 @@ class Layout extends StatelessWidget {
 //          ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 70.0),
+                padding: const EdgeInsets.fromLTRB(
+                    marginLeft, 0.0, marginRight, 0.0),
                 alignment: Alignment.topCenter,
                 child: Column(
                   children: <Widget>[
                     ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 1200),
+                      constraints: BoxConstraints(maxWidth: maxWidth),
                       child: navbar,
                     ),
                     Expanded(
                       child: Center(
                         child: SingleChildScrollView(
                           child: ConstrainedBox(
-                            constraints: BoxConstraints(maxWidth: 1200),
-                            child: content,
+                            constraints: BoxConstraints(
+                                maxWidth: maxWidth,
+                                maxHeight: size.height -
+                                    (navBarSize +
+                                        footerSize)), //navbar + footer
+                            child: Column(
+                              children: <Widget>[
+                                Expanded(child: content),
+                                SizedBox(
+                                  height: footerSize,
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -87,7 +101,6 @@ class Page extends StatelessWidget {
   Widget build(BuildContext context) {
     return Layout(
       content: content,
-      footer: Footer(),
       navbar: NavigationBar(),
     );
   }
