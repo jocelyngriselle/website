@@ -12,6 +12,7 @@ class PortofolioPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Page(
+      contentHeight: 1200,
       content: ScreenTypeLayout(
         desktop: PortofolioContentDesktop(),
         tablet: PortofolioContentDesktop(),
@@ -41,23 +42,19 @@ class PortofolioContentMobile extends StatelessWidget {
 class PortofolioContentDesktop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      constraints: BoxConstraints(maxHeight: maxWidth),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Headline2Section(
-            name: 'Selection de',
-            headlineName: 'Projets',
-            description: 'Une selection des projets réalisés par moi et '
-                'seulement parce que je suis énorme et trop bon',
-          ),
-          Expanded(
-            child: Projects(),
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Headline2Section(
+          name: 'Selection de',
+          headlineName: 'Projets',
+          description: 'Une selection des projets réalisés par moi et '
+              'seulement parce que je suis énorme et trop bon',
+        ),
+        Projects(),
+      ],
     );
   }
 }
@@ -65,65 +62,50 @@ class PortofolioContentDesktop extends StatelessWidget {
 class Projects extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Expanded(
-          flex: 1,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Expanded(
+      //color: Colors.red,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Row(
+            //mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Expanded(
-                flex: 4,
-                child: Project(
-                  project: valoo,
-                ),
+              Project(
+                project: valoo,
               ),
               SizedBox(
                 width: 50,
               ),
-              Expanded(
-                flex: 5,
-                child: Project(
-                  project: mixity,
-                ),
+              Project(
+                project: mixity,
               ),
             ],
           ),
-        ),
-        SizedBox(
-          height: 50,
-        ),
-        Expanded(
-          flex: 1,
-          child: Row(
+          SizedBox(
+            height: 50,
+          ),
+          Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            //crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Expanded(
-                flex: 5,
-                child: Project(
-                  project: openClassroom,
-                ),
+              Project(
+                project: openClassroom,
               ),
               SizedBox(
                 width: 50,
               ),
-              Expanded(
-                flex: 4,
-                child: Project(
-                  project: creative,
-                ),
+              Project(
+                project: creative,
               ),
             ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -140,8 +122,8 @@ class ProjectState extends State<Project> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //height: 900,
-      color: Colors.blue,
+      height: 400, // TODO mobile height : 300 ?
+      //color: Colors.blue,
       //constraints: BoxConstraints(minHeight: 1500, minWidth: 500),
       child: Semantics(
         container: true,
@@ -187,10 +169,12 @@ class ProjectDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Layout(
+      contentHeight: 900,
       navbar: HeroNavBar(
         project: project,
       ), // AnimatedNavbar
       content: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Container(
             //color: Colors.pink,
@@ -604,7 +588,7 @@ final mixity = ProjectModel(
   id: 2,
   name: 'Fullstack for',
   headlineName: 'Good',
-  image: 'images/mixity.png',
+  image: 'images/valoo.png',
   description: "Mixity est la première plateforme digitale qui "
       "restitue l’impact global diversité et inclusion des "
       "entreprises, écoles, collectivités, associations...\n"
@@ -641,7 +625,7 @@ final openClassroom = ProjectModel(
   id: 3,
   name: 'Cours à ciel',
   headlineName: 'Ouvert',
-  image: 'images/openclassroom.png',
+  image: 'images/valoo.png',
   description:
       "OpenClassrooms est un site web de formation en ligne qui propose"
       " à ses membres des cours certifiants et des parcours débouchant sur des "
@@ -674,7 +658,7 @@ final creative = ProjectModel(
   id: 4,
   name: 'Oblique',
   headlineName: 'Strategies',
-  image: 'images/creative.png',
+  image: 'images/valoo.png',
   description: 'Les cartes « stratégies obliques » ont été '
       'développées en anglais, et de nombreuses applications '
       'mobiles ou sites web vous permettent de piocher une '

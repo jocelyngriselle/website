@@ -7,6 +7,7 @@ class ContactPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Page(
+      contentHeight: 600,
       content: Row(
         children: <Widget>[
           Expanded(

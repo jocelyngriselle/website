@@ -93,7 +93,7 @@ class Headline2Section extends StatelessWidget {
             children: <Widget>[
               RichText(
                 text: TextSpan(
-                  text: ' $name ',
+                  text: '$name ',
                   style: Theme.of(context).textTheme.headline3,
                   children: <TextSpan>[
                     TextSpan(

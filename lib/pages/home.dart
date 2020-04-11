@@ -7,6 +7,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Page(
+      contentHeight: 500,
       content: ScreenTypeLayout(
         desktop: HomeContentDesktop(),
         tablet: HomeContentMobile(),

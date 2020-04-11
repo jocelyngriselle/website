@@ -20,6 +20,7 @@ class AnimationsPlayground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Layout(
       navbar: AnimatedNavbar(),
+      contentHeight: 500,
       content: ScreenTypeLayout(
           desktop: DesktopAnimatedApp(),
           tablet: MobileAnimatedApp(),

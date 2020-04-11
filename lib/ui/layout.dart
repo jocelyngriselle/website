@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'navigation.dart';
 import 'theme.dart';
+import 'dart:math';
 
 class Layout extends StatelessWidget {
   final Widget content;
   final Widget navbar;
+  final double contentHeight;
   const Layout({
     Key key,
     this.content,
+    this.contentHeight,
     this.navbar,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    print(size.height);
-    print(size.width);
     return Scrollbar(
       child: ResponsiveBuilder(
         builder: (context, sizingInformation) => Scaffold(
@@ -24,69 +24,46 @@ class Layout extends StatelessWidget {
               ? NavigationDrawer()
               : null,
           backgroundColor: Colors.white,
-          body: Stack(
-            children: <Widget>[
-              Container(
-                height: size.height,
-                width: size.width,
-                //color: Colors.blue,
-                //padding: const EdgeInsets.symmetric(horizontal: 70.0),
-                //alignment: Alignment.topCenter,
-//          child: Expanded(
-//            child: DecoratedBox(
-//              position: DecorationPosition.background,
-//              decoration: BoxDecoration(
-//                image: DecorationImage(
-//                  image: AssetImage(
-//                    "images/background.png",
-//                  ),
-//                  fit: BoxFit.cover,
-//                ),
-//              ),
-//            ),
-//          ),
-              ),
-              Container(
-                padding: const EdgeInsets.fromLTRB(
-                    marginLeft, 0.0, marginRight, 0.0),
-                alignment: Alignment.topCenter,
-                child: Column(
-                  children: <Widget>[
-                    ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: maxWidth),
-                      child: navbar,
+          body: LayoutBuilder(
+            builder:
+                (BuildContext context, BoxConstraints viewportConstraints) {
+              return SingleChildScrollView(
+                child: Center(
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: maxWidth,
+                      minHeight: viewportConstraints.maxHeight,
                     ),
-                    Expanded(
-                      child: Center(
-                        child: SingleChildScrollView(
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                                maxWidth: maxWidth,
-                                maxHeight: size.height -
-                                    (navBarSize +
-                                        footerSize)), //navbar + footer
-                            child: Column(
-                              children: <Widget>[
-                                Expanded(child: content),
-                                SizedBox(
-                                  height: footerSize,
-                                )
-                              ],
+                    padding: const EdgeInsets.fromLTRB(
+                        marginLeft, 0.0, marginRight, 0.0),
+                    alignment: Alignment.topCenter,
+                    child: IntrinsicHeight(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            // A fixed-height child.
+                            height: navBarHeight,
+                            child: navbar,
+                          ),
+                          Expanded(
+                            child: Container(
+                              height: max(contentHeight,
+                                  viewportConstraints.maxHeight - navBarHeight),
+                              //color: Colors.orange,
+                              child: content,
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
-//                    ConstrainedBox(
-//                      constraints: BoxConstraints(maxWidth: 1200),
-//                      child: footer,
-//                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              );
+            },
           ),
-          //bottomNavigationBar: Footer(),
         ),
       ),
     );
@@ -95,13 +72,15 @@ class Layout extends StatelessWidget {
 
 class Page extends StatelessWidget {
   final Widget content;
-  const Page({Key key, this.content}) : super(key: key);
+  final double contentHeight;
+  const Page({Key key, this.content, this.contentHeight}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Layout(
-      content: content,
       navbar: NavigationBar(),
+      content: content,
+      contentHeight: contentHeight,
     );
   }
 }

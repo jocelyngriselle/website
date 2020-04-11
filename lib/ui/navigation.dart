@@ -22,16 +22,16 @@ class NavigationBarMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: navBarSize, // TODO too much height ?
+      height: navBarHeight, // TODO too much height ?
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+          NavBarLogo(),
           IconButton(
             icon: Icon(Icons.menu),
             onPressed: () {},
           ),
-          NavBarLogo()
         ],
       ),
     );
@@ -42,7 +42,7 @@ class NavigationBarDesktop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: navBarSize,
+      height: navBarHeight,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
