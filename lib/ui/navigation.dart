@@ -30,7 +30,9 @@ class NavigationBarMobile extends StatelessWidget {
           NavBarLogo(),
           IconButton(
             icon: Icon(Icons.menu),
-            onPressed: () {},
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
           ),
         ],
       ),
@@ -57,13 +59,6 @@ class NavigationBarDesktop extends StatelessWidget {
               SizedBox(
                 width: 10,
               ),
-//              NavBarItem(
-//                'Compétences',
-//                key: UniqueKey(),
-//              ),
-//              SizedBox(
-//                width: 10,
-//              ),
               NavBarItem(
                 'Projets',
                 key: UniqueKey(),
@@ -72,8 +67,9 @@ class NavigationBarDesktop extends StatelessWidget {
                 width: 10,
               ),
               OutlineButton(
-                borderSide: BorderSide(color: Theme.of(context).accentColor),
                 color: Theme.of(context).accentColor,
+                borderSide: BorderSide(
+                    width: 2.0, color: Theme.of(context).accentColor),
                 highlightedBorderColor: Theme.of(context).accentColor,
                 onPressed: () {
                   Navigator.of(context).push(
@@ -117,25 +113,6 @@ class NavigationBarDesktop extends StatelessWidget {
   }
 }
 
-class DrawerItem extends StatelessWidget {
-  final String title;
-  final IconData icon;
-  const DrawerItem(this.title, this.icon);
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 30, top: 60),
-      child: Row(
-        children: <Widget>[
-          Icon(icon),
-          SizedBox(width: 30),
-          NavBarItem(title),
-        ],
-      ),
-    );
-  }
-}
-
 class NavigationDrawerHeader extends StatelessWidget {
   const NavigationDrawerHeader({Key key}) : super(key: key);
   @override
@@ -148,7 +125,7 @@ class NavigationDrawerHeader extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(
-            'SKILL UP NOW',
+            'Jocelyn Griselle',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w800,
@@ -156,7 +133,7 @@ class NavigationDrawerHeader extends StatelessWidget {
             ),
           ),
           Text(
-            'TAP HERE',
+            'Développeur fullstack',
             style: TextStyle(color: Colors.white),
           )
         ],
@@ -180,8 +157,29 @@ class NavigationDrawer extends StatelessWidget {
       child: Column(
         children: <Widget>[
           NavigationDrawerHeader(),
-          DrawerItem('Episodes', Icons.videocam),
-          DrawerItem('About', Icons.help),
+          DrawerItem('Home', Icons.home),
+          DrawerItem('Services', Icons.build),
+          DrawerItem('Projets', Icons.image),
+          DrawerItem('Contact', Icons.contact_mail),
+        ],
+      ),
+    );
+  }
+}
+
+class DrawerItem extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  const DrawerItem(this.title, this.icon);
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 30, top: 60),
+      child: Row(
+        children: <Widget>[
+          Icon(icon),
+          SizedBox(width: 30),
+          NavBarItem(title),
         ],
       ),
     );

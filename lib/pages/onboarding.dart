@@ -22,9 +22,10 @@ class AnimationsPlayground extends StatelessWidget {
       navbar: AnimatedNavbar(),
       contentHeight: 500,
       content: ScreenTypeLayout(
-          desktop: DesktopAnimatedApp(),
-          tablet: MobileAnimatedApp(),
-          mobile: MobileAnimatedApp()),
+        desktop: DesktopAnimatedApp(),
+        tablet: MobileAnimatedApp(),
+        mobile: MobileAnimatedApp(),
+      ),
       //footer: AnimatedFooter(),
     );
   }
@@ -143,7 +144,7 @@ class _MobileAnimatedAppState extends State<MobileAnimatedApp>
   void initState() {
     super.initState();
     controller = AnimationController(
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 1),
       vsync: this,
     )..forward();
     textTranslation = Tween(
@@ -162,7 +163,7 @@ class _MobileAnimatedAppState extends State<MobileAnimatedApp>
       ),
     );
     navbarTranslation = Tween(
-      begin: Offset(0.0, -5.0),
+      begin: Offset(0.0, -1.0),
       end: Offset(0.0, 0.0),
     ).animate(
       CurvedAnimation(
@@ -177,21 +178,20 @@ class _MobileAnimatedAppState extends State<MobileAnimatedApp>
     return AnimatedBuilder(
       animation: controller,
       builder: (BuildContext context, Widget child) {
-        return Layout(
-          navbar: FractionalTranslation(
-            translation: navbarTranslation.value,
-            child: NavigationBar(),
-          ),
-          content: Expanded(
-            child: FractionalTranslation(
-              translation: textTranslation.value,
-              child: FadeTransition(
-                opacity: textOpacity,
-                child: HomeContentMobile(),
+        return Row(
+          children: [
+            Expanded(
+              child: FractionalTranslation(
+                translation: textTranslation.value,
+                child: FadeTransition(
+                  opacity: textOpacity,
+                  child: Headline1Section(),
+                ),
               ),
             ),
-          ),
+          ],
         );
+        ;
       },
     );
   }

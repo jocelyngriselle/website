@@ -11,7 +11,7 @@ class CallToActionDesktop extends StatelessWidget {
     return RaisedButton(
       color: Theme.of(context).accentColor,
       onPressed: () {
-        Navigator.of(context).push(createRoute("Contact"));
+        Navigator.of(context).push(createRoute(title));
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
@@ -31,58 +31,6 @@ class CallToActionDesktop extends StatelessWidget {
   }
 }
 
-class CallToActionTablet extends StatelessWidget {
-  final String title;
-  const CallToActionTablet(this.title);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
-            color: Colors.white,
-          ),
-        ),
-        decoration: BoxDecoration(
-          color: Color.fromARGB(255, 31, 229, 146),
-          borderRadius: BorderRadius.circular(5),
-        ),
-      ),
-    );
-  }
-}
-
-class CallToActionMobile extends StatelessWidget {
-  final String title;
-
-  const CallToActionMobile(this.title);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      alignment: Alignment.center,
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w800,
-          color: Colors.white,
-        ),
-      ),
-      decoration: BoxDecoration(
-        color: Color.fromARGB(255, 31, 229, 146),
-        borderRadius: BorderRadius.circular(5),
-      ),
-    );
-  }
-}
-
 class CallToAction extends StatelessWidget {
   final String title;
   const CallToAction(this.title);
@@ -90,9 +38,51 @@ class CallToAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenTypeLayout(
-      mobile: CallToActionMobile(title),
-      tablet: CallToActionTablet(title),
+      mobile: CallToActionDesktop(title),
+      tablet: CallToActionDesktop(title),
       desktop: CallToActionDesktop(title),
+    );
+  }
+}
+
+class OutlineButtonDesktop extends StatelessWidget {
+  final String title;
+  const OutlineButtonDesktop(this.title);
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlineButton(
+      borderSide: BorderSide(width: 2.0, color: Theme.of(context).accentColor),
+      color: Colors.transparent,
+      highlightedBorderColor: Theme.of(context).accentColor,
+      onPressed: () {
+        Navigator.of(context).push(createRoute(title));
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+        child: Text(
+          title,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w400,
+            color: Theme.of(context).accentColor,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class OutlineButtonToAction extends StatelessWidget {
+  final String title;
+  const OutlineButtonToAction(this.title);
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenTypeLayout(
+      mobile: OutlineButtonDesktop(title),
+      tablet: OutlineButtonDesktop(title),
+      desktop: OutlineButtonDesktop(title),
     );
   }
 }

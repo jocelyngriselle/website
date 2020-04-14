@@ -20,7 +20,7 @@ class Layout extends StatelessWidget {
     return Scrollbar(
       child: ResponsiveBuilder(
         builder: (context, sizingInformation) => Scaffold(
-          drawer: sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+          drawer: sizingInformation.deviceScreenType != DeviceScreenType.Desktop
               ? NavigationDrawer()
               : null,
           backgroundColor: Colors.white,
@@ -70,10 +70,11 @@ class Layout extends StatelessWidget {
   }
 }
 
-class Page extends StatelessWidget {
+class PageLayout extends StatelessWidget {
   final Widget content;
   final double contentHeight;
-  const Page({Key key, this.content, this.contentHeight}) : super(key: key);
+  const PageLayout({Key key, this.content, this.contentHeight})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

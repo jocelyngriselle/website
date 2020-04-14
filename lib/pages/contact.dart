@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import '../ui/layout.dart';
+import 'package:website/ui/layout.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:html';
 
 class ContactPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Page(
+    return PageLayout(
       contentHeight: 600,
       content: Row(
         children: <Widget>[

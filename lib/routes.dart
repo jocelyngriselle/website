@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'pages/skills.dart';
 import 'pages/home.dart';
 import 'pages/contact.dart';
 import 'pages/services.dart';
@@ -21,11 +20,6 @@ Widget getRoute(String name) {
     case "Services":
       {
         return ServicesPage();
-      }
-      break;
-    case "Compétences":
-      {
-        return SkillsPage();
       }
       break;
     case "Projets":

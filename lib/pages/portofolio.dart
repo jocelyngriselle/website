@@ -6,18 +6,17 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../ui/layout.dart';
 import '../ui/composants.dart';
-import '../ui/theme.dart';
 
 class PortofolioPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Page(
-      contentHeight: 1200,
+    return PageLayout(
       content: ScreenTypeLayout(
         desktop: PortofolioContentDesktop(),
-        tablet: PortofolioContentDesktop(),
-        //mobile: ServicesContentMobile(),
+        tablet: PortofolioContentMobile(),
+        mobile: PortofolioContentMobile(),
       ),
+      contentHeight: 1300,
     );
   }
 }
@@ -28,12 +27,17 @@ class PortofolioContentMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        Project(
-          project: mixity,
+        Headline2Section(
+          name: 'Selection de',
+          headlineName: 'Projets',
+          description:
+              "A closer look at the mission, impact, and outcome of every featured project.",
         ),
+        ProjectsMobile(),
       ],
     );
   }
@@ -45,15 +49,15 @@ class PortofolioContentDesktop extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Headline2Section(
           name: 'Selection de',
           headlineName: 'Projets',
-          description: 'Une selection des projets réalisés par moi et '
-              'seulement parce que je suis énorme et trop bon',
+          description:
+              "A closer look at the mission, impact, and outcome of every featured project.",
         ),
-        Projects(),
+        Expanded(child: Projects()),
       ],
     );
   }
@@ -62,47 +66,62 @@ class PortofolioContentDesktop extends StatelessWidget {
 class Projects extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Project(
+              project: mixity,
+            ),
+            Project(
+              project: openClassroom,
+            ),
+          ],
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Project(
+              project: creative,
+            ),
+            Project(
+              project: valoo,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class ProjectsMobile extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Expanded(
-      //color: Colors.red,
       child: Column(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Row(
-            //mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Project(
-                project: valoo,
-              ),
-              SizedBox(
-                width: 50,
-              ),
-              Project(
-                project: mixity,
-              ),
-            ],
+          Project(
+            project: mixity,
           ),
-          SizedBox(
-            height: 50,
+          Project(
+            project: openClassroom,
           ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Project(
-                project: openClassroom,
-              ),
-              SizedBox(
-                width: 50,
-              ),
-              Project(
-                project: creative,
-              ),
-            ],
+          Project(
+            project: creative,
+          ),
+          Project(
+            project: valoo,
           ),
         ],
       ),
@@ -119,44 +138,143 @@ class Project extends StatefulWidget {
 }
 
 class ProjectState extends State<Project> {
+  final width = 500.0; // TODO mobile width : 300 ?
+  final height = 500.0; // TODO mobile height : 300 ?
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 400, // TODO mobile height : 300 ?
-      //color: Colors.blue,
-      //constraints: BoxConstraints(minHeight: 1500, minWidth: 500),
-      child: Semantics(
-        container: true,
-        child: new Container(
-            margin: const EdgeInsets.all(4.0),
-            child: Material(
-              shadowColor: Colors.grey.shade400, // added
-              color: Colors.transparent,
-              type: MaterialType.card,
-              elevation: 3,
-              child: InkWell(
-                radius: 1200.0,
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProjectDetail(
-                      project: widget.project,
-                    ),
-                  ),
-                ),
-                child: Container(
-                  padding: EdgeInsets.all(50),
-                  child: Hero(
-                    tag: "avatar_" + widget.project.id.toString(),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: height,
+        width: width,
+        color: Colors.transparent,
+        //constraints: BoxConstraints(minHeight: 1500, minWidth: 500),
+        child: ShadowedCard(
+          child: Stack(
+            children: <Widget>[
+              Container(
+                height: height,
+                width: width,
+                child: Hero(
+                  tag: "avatar_" + widget.project.id.toString(),
+                  child: ShadowedCard(
                     child: Image.asset(
                       widget.project.image,
-                      height: 280,
+                      //fit: BoxFit.fitWidth,
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
               ),
-              borderRadius: new BorderRadius.circular(15.0), // added
-            )),
+              Column(
+                children: <Widget>[
+                  Container(
+                    height: 1 / 5 * height + 50,
+                  ),
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    height: 2 / 5 * height,
+                    width: width,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment
+                            .bottomCenter, // 10% of the width, so there are ten blinds.
+                        colors: [
+                          widget.project.color.withOpacity(0),
+                          Colors.white,
+                        ], // whitish to gray
+                        // repeats the gradient over the canvas
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  Container(
+                    height: 3 / 5 * height + 50,
+                  ),
+                  Container(
+                    color: Colors.white,
+                    height: 1 / 5 * height + 50,
+                    width: width,
+                  ),
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  Container(
+                    height: 3 / 5 * height,
+                  ),
+                  Container(
+                    height: 2 / 5 * height,
+                    width: width,
+                    color: Colors.transparent,
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          widget.project.client,
+                          style: TextStyle(
+                            color: widget.project.color,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 24,
+                            fontFamily: 'Open sans',
+                          ),
+                        ),
+                        Text(
+                          "${widget.project.role} - ${widget.project.duration}",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 18,
+                            fontFamily: 'Open sans',
+                          ),
+                        ),
+                        OutlineButton(
+//                          shape: RoundedRectangleBorder(
+//                            borderRadius: BorderRadius.circular(18.0),
+//                            //side: BorderSide(color: Colors.red)
+//                          ),
+                          borderSide: BorderSide(
+                              width: 2.0, color: widget.project.color),
+                          color: widget.project.color,
+                          highlightedBorderColor: widget.project.color,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Details',
+                              style: TextStyle(
+                                color: widget.project.color,
+                                fontSize: 18,
+                                fontFamily: 'Open sans',
+                              ),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProjectDetail(
+                                  project: widget.project,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+            //),
+          ),
+        ),
       ),
     );
   }
@@ -216,19 +334,18 @@ class ProjectDetailRow extends StatelessWidget {
           width: 50,
         ),
         Expanded(
-          child: Container(
-            //color: Colors.green,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                maxHeight: 400,
-              ),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Hero(
-                  tag: "avatar_" + project.id.toString(),
-                  child: Image.asset(
-                    project.image,
-                  ),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: 500,
+              maxWidth: 400,
+            ),
+            child: Hero(
+              tag: "avatar_" + project.id.toString(),
+              child: ShadowedCard(
+                child: Image.asset(
+                  project.image,
+                  fit: BoxFit.fitWidth,
+                  //"images/creative_test2.png"
                 ),
               ),
             ),
@@ -253,24 +370,14 @@ class ProjectDescription extends StatelessWidget {
         RichText(
           text: TextSpan(
             text: "${project.name} ",
-            style: TextStyle(
-              fontWeight: FontWeight.w800,
-              fontFamily: 'Open sans',
-              color: Colors.black,
-              fontSize: 32,
-              height: 1.5,
-            ),
+            style: Theme.of(context).textTheme.headline3,
             children: <TextSpan>[
               TextSpan(
                 text: " ${project.headlineName} ", //' backend & mobile ',
-                style: TextStyle(
-                  backgroundColor: Colors.grey.shade200,
-                  color: Theme.of(context).accentColor,
-                  fontWeight: FontWeight.w800,
-                  fontFamily: 'Open sans',
-                  fontSize: 32,
-                  height: 0.9,
-                ),
+                style: Theme.of(context)
+                    .textTheme
+                    .headline4
+                    .copyWith(color: project.color),
               ),
             ],
           ),
@@ -305,7 +412,7 @@ class TestimonyRow extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 25),
       width: 900,
       decoration: new BoxDecoration(
-          color: Theme.of(context).backgroundColor,
+          color: project.color.withOpacity(0.3),
           borderRadius: new BorderRadius.only(
             bottomRight: const Radius.circular(15.0),
             topLeft: const Radius.circular(15.0),
@@ -332,7 +439,10 @@ class TestimonyRow extends StatelessWidget {
                 ),
                 Text(
                   " ${project.testimonyJob} ",
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(color: project.color),
                 )
               ],
             ),
@@ -355,7 +465,7 @@ class TestimonyRow extends StatelessWidget {
                     alignment: Alignment.bottomLeft,
                     child: Icon(
                       FontAwesomeIcons.quoteLeft,
-                      color: Theme.of(context).accentColor,
+                      color: project.color,
                     ),
                   ),
                   SizedBox(
@@ -370,7 +480,7 @@ class TestimonyRow extends StatelessWidget {
                     alignment: Alignment.bottomRight,
                     child: Icon(
                       FontAwesomeIcons.quoteRight,
-                      color: Theme.of(context).accentColor,
+                      color: project.color,
                     ),
                   ),
                   SizedBox(
@@ -469,10 +579,9 @@ class HeroNavBar extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     OutlineButton(
-                      borderSide:
-                          BorderSide(color: Theme.of(context).accentColor),
-                      color: Theme.of(context).accentColor,
-                      highlightedBorderColor: Theme.of(context).accentColor,
+                      borderSide: BorderSide(color: project.color),
+                      color: project.color,
+                      highlightedBorderColor: project.color,
                       onPressed: () {
                         window.open(project.url, 'url');
                       },
@@ -486,7 +595,7 @@ class HeroNavBar extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w400,
-                                color: Theme.of(context).accentColor,
+                                color: project.color,
                               ),
                             ),
                             SizedBox(
@@ -494,7 +603,7 @@ class HeroNavBar extends StatelessWidget {
                             ),
                             Icon(
                               FontAwesomeIcons.eye,
-                              color: Theme.of(context).accentColor,
+                              color: project.color,
                             )
                           ],
                         ),
@@ -529,6 +638,8 @@ class ProjectModel {
   final String duration;
   final String location;
   final String url;
+  final Color color;
+  final String client;
 
   ProjectModel({
     this.id,
@@ -547,14 +658,17 @@ class ProjectModel {
     this.duration,
     this.location,
     this.url,
+    this.color: Colors.red,
+    this.client: "Some Client",
   });
 }
 
 final valoo = ProjectModel(
   id: 1,
+  client: "Valoo",
   name: 'Assurance à la',
   headlineName: 'demande',
-  image: 'images/valoo.png',
+  image: 'images/valoo_project.png',
   description: "Revendre son bien peut s’avérer être un parcours "
       "du combattant. C’est pour cela qu’une start-up française "
       "a développé une appli qui permet d’estimer et revendre "
@@ -582,13 +696,15 @@ final valoo = ProjectModel(
   duration: "2 ans",
   location: "Nantes",
   status: "CDI",
+  color: Color.fromRGBO(100, 184, 178, 1),
 );
 
 final mixity = ProjectModel(
   id: 2,
+  client: "Mixity",
   name: 'Fullstack for',
   headlineName: 'Good',
-  image: 'images/valoo.png',
+  image: 'images/mixity_project.png',
   description: "Mixity est la première plateforme digitale qui "
       "restitue l’impact global diversité et inclusion des "
       "entreprises, écoles, collectivités, associations...\n"
@@ -619,13 +735,15 @@ final mixity = ProjectModel(
   location: "Nantes",
   status: "Freelance",
   url: "https://www.mixity.co/",
+  color: Color.fromRGBO(112, 166, 215, 1),
 );
 
 final openClassroom = ProjectModel(
   id: 3,
   name: 'Cours à ciel',
+  client: 'OpenClassroom',
   headlineName: 'Ouvert',
-  image: 'images/valoo.png',
+  image: 'images/openclassroom_project.png',
   description:
       "OpenClassrooms est un site web de formation en ligne qui propose"
       " à ses membres des cours certifiants et des parcours débouchant sur des "
@@ -647,18 +765,21 @@ final openClassroom = ProjectModel(
     "images/django.png",
     "images/postgresql.png",
   ],
-  canVisit: false,
+  canVisit: true,
+  url: "https://openclassrooms.com/",
   role: "Mentor Parcours Python",
   duration: "6 mois",
   location: "Télétravail",
   status: "Freelance",
+  color: Color.fromRGBO(106, 106, 225, 1),
 );
 
 final creative = ProjectModel(
   id: 4,
   name: 'Oblique',
+  client: "Creative Hacks",
   headlineName: 'Strategies',
-  image: 'images/valoo.png',
+  image: 'images/creative_project.png',
   description: 'Les cartes « stratégies obliques » ont été '
       'développées en anglais, et de nombreuses applications '
       'mobiles ou sites web vous permettent de piocher une '
@@ -684,4 +805,5 @@ final creative = ProjectModel(
   duration: "2 mois",
   location: "Télétravail",
   status: "Freelance",
+  color: Color.fromRGBO(238, 174, 120, 1),
 );

@@ -6,7 +6,7 @@ import '../ui/composants.dart';
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Page(
+    return PageLayout(
       contentHeight: 500,
       content: ScreenTypeLayout(
         desktop: HomeContentDesktop(),

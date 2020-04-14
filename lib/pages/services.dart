@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import '../ui/layout.dart';
 import '../ui/composants.dart';
+import '../ui/buttons.dart';
 
 class ServicesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Page(
+    return PageLayout(
+      contentHeight: 850,
       content: ScreenTypeLayout(
         desktop: ServicesContentDesktop(),
         tablet: ServicesContentMobile(),
@@ -20,78 +22,17 @@ class ServicesContentDesktop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-//        SizedBox(
-//          height: 30,
-//        ),
-//        Container(
-//          width: 1000,
-//          child: Column(
-//            mainAxisAlignment: MainAxisAlignment.start,
-//            crossAxisAlignment: CrossAxisAlignment.start,
-//            children: [
-//              RichText(
-//                text: TextSpan(
-//                  text: "Jocelyn Griselle,\n",
-//                  style: Theme.of(context).textTheme.headline3,
-//                  children: <TextSpan>[
-//                    TextSpan(
-//                      text: 'développeur ',
-//                      style: Theme.of(context).textTheme.headline3,
-//                    ),
-//                    TextSpan(
-//                      text: ' fullstack ', //' backend & mobile ',
-//                      style: Theme.of(context).textTheme.headline4,
-//                    ),
-//                  ],
-//                ),
-//              ),
-//              SizedBox(
-//                height: 30,
-//              ),
-//              Text(
-//                'Ingénieur en développement freelance, '
-//                'je suis basé à Nantes et disponible pour vos projets web et mobile.',
-//                style: Theme.of(context).textTheme.bodyText1,
-//              ),
-//            ],
-//          ),
-//        ),
-        SizedBox(
-          height: 50,
-        ),
-        ServiceCardReverse(
-          title: 'Développement ',
-          titleHeadline: ' Backend ',
-          image: 'images/mac.png',
+        Headline2Section(
+          name: 'Je peux vous rendre',
+          headlineName: 'Service',
           description:
-              "Anonyme assembla ensemble des morceaux de texte pour réaliser"
-              " un livre spécimen de polices de texte.",
+              'Innovative experiences that help companies recapture the market from their competitors.',
         ),
-        SizedBox(
-          height: 50,
-        ),
-        ServiceCard(
-          title: 'Développement ',
-          titleHeadline: ' Mobile ',
-          image: 'images/iphone.png',
-          description:
-              "Anonyme assembla ensemble des morceaux de texte pour réaliser"
-              " un livre spécimen de polices de texte.",
-        ),
-        SizedBox(
-          height: 50,
-        ),
-        ServiceCardReverse(
-          title: ' Formation & \n',
-          titleHeadline: ' Enseignement ',
-          image: 'images/formation.png',
-          description:
-              "Anonyme assembla ensemble des morceaux de texte pour réaliser"
-              " un livre spécimen de polices de texte.",
-        ),
+        Expanded(child: Services()),
       ],
     );
   }
@@ -105,244 +46,223 @@ class ServicesContentMobile extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[],
+      children: <Widget>[], // TODO
+    );
+  }
+}
+
+class Services extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        ServiceCard(
+          service: formation,
+        ),
+        ServiceCard(
+          service: backend,
+          main: true,
+        ),
+        ServiceCard(
+          service: mobile,
+        ),
+      ],
+    );
+  }
+}
+
+class ServiceImage extends StatelessWidget {
+  final ServiceModel service;
+  final bool main;
+
+  ServiceImage({
+    this.service,
+    this.main: false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: main ? 150 : 120,
+      child: Container(
+        child: Center(
+          child: Image.asset(
+            service.image,
+            fit: BoxFit.fitHeight,
+            alignment: Alignment.topCenter,
+          ),
+        ),
+      ),
     );
   }
 }
 
 class ServiceCard extends StatelessWidget {
-  final String title;
-  final String titleHeadline;
-  final String description;
-  final String image;
+  final ServiceModel service;
+  final bool main;
 
-  ServiceCard({this.title, this.titleHeadline, this.description, this.image});
+  ServiceCard({
+    this.service,
+    this.main: false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: 400,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        width: main ? 350 : 300,
+        height: main ? 600 : 500,
+        child: ShadowedCard(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 RichText(
                   text: TextSpan(
-                    text: title,
-                    style: Theme.of(context).textTheme.headline3,
+                    text: service.name,
+                    style: Theme.of(context).textTheme.headline5,
                     children: <TextSpan>[
                       TextSpan(
-                        text: titleHeadline,
-                        style: Theme.of(context).textTheme.headline4,
+                        text: service.headlineName,
+                        style: Theme.of(context).textTheme.headline6,
                       ),
                     ],
                   ),
                 ),
                 SizedBox(
-                  height: 30,
+                  height: 10,
                 ),
-                Text(
-                  description,
-                  style: Theme.of(context).textTheme.bodyText1,
+                ServiceImage(
+                  service: service,
+                  main: main,
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Skill(image: "images/python.png"),
-                    Skill(image: "images/django.png"),
-                    Skill(image: "images/scrapy.png"),
-                  ],
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    child: SkillBar(
+                      small: true,
+                      skills: service.skills,
+                    ),
+                  ),
                 ),
-//                Row(
-//                  children: <Widget>[
-//                    Icon(
-//                      Icons.no_encryption,
-//                      size: 18,
-//                      color: Colors.blue,
-//                    ),
-//                    Text(
-//                      ' Sécurisé',
-//                      style: Theme.of(context).textTheme.bodyText1,
-//                    ),
-//                  ],
-//                ),
-//                Row(
-//                  children: <Widget>[
-//                    Icon(
-//                      Icons.remove_red_eye,
-//                      size: 18,
-//                      color: Colors.pink,
-//                    ),
-//                    Text(
-//                      ' User friendly',
-//                      style: Theme.of(context).textTheme.bodyText1,
-//                    ),
-//                  ],
-//                ),
-//                Row(
-//                  children: <Widget>[
-//                    Icon(
-//                      Icons.security,
-//                      size: 18,
-//                      color: Colors.orange,
-//                    ),
-//                    Text(
-//                      ' RGPD',
-//                      style: Theme.of(context).textTheme.bodyText1,
-//                    ),
-//                  ],
-//                ),
                 SizedBox(
                   height: 30,
                 ),
+                Column(
+                  children: <Widget>[
+                    Text(
+                      "${service.experience} d'expérience",
+                      style: Theme.of(context).textTheme.overline,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "A partir de ${service.pricing}€ / jour",
+                      style: Theme.of(context).textTheme.overline,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Align(
+                    alignment: Alignment.bottomCenter,
+                    child: main
+                        ? CallToAction("Contact")
+                        : OutlineButtonToAction('Contact'))
               ],
             ),
           ),
-          SizedBox(
-            width: 200,
-          ),
-          Center(
-            child: SizedBox(
-              height: 380,
-              width: 280,
-              child: Image.asset(
-                image,
-                alignment: Alignment.topCenter,
-              ),
-            ),
-          ),
-          //CallToAction('Discutons'),
-        ],
+        ),
       ),
     );
   }
 }
 
-class ServiceCardReverse extends StatelessWidget {
-  final String title;
-  final String titleHeadline;
+class ServiceModel {
   final String description;
+  final int id;
   final String image;
+  final String name;
+  final String headlineName;
+  final List<String> skills;
+  final String pricing;
+  final String experience;
 
-  ServiceCardReverse(
-      {this.title, this.titleHeadline, this.description, this.image});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: 400,
-            child: Center(
-              child: SizedBox(
-                height: 380,
-                width: 280,
-                child: Image.asset(
-                  image,
-                  alignment: Alignment.topCenter,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 200,
-          ),
-          Container(
-            width: 400,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                RichText(
-                  text: TextSpan(
-                    text: title,
-                    style: Theme.of(context).textTheme.headline3,
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: titleHeadline,
-                        style: Theme.of(context).textTheme.headline4,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Text(
-                  description,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Skill(image: "images/dart.png"),
-                    Skill(image: "images/flutter.png"),
-                    Skill(image: "images/swift.png"),
-                  ],
-                ),
-//                Row(
-//                  children: <Widget>[
-//                    Icon(
-//                      Icons.no_encryption,
-//                      size: 18,
-//                      color: Colors.blue,
-//                    ),
-//                    Text(
-//                      ' Sécurisé',
-//                      style: Theme.of(context).textTheme.bodyText1,
-//                    ),
-//                  ],
-//                ),
-//                Row(
-//                  children: <Widget>[
-//                    Icon(
-//                      Icons.remove_red_eye,
-//                      size: 18,
-//                      color: Colors.pink,
-//                    ),
-//                    Text(
-//                      ' User friendly',
-//                      style: Theme.of(context).textTheme.bodyText1,
-//                    ),
-//                  ],
-//                ),
-//                Row(
-//                  children: <Widget>[
-//                    Icon(
-//                      Icons.security,
-//                      size: 18,
-//                      color: Colors.orange,
-//                    ),
-//                    Text(
-//                      ' RGPD',
-//                      style: Theme.of(context).textTheme.bodyText1,
-//                    ),
-//                  ],
-//                ),
-                SizedBox(
-                  height: 30,
-                ),
-              ],
-            ),
-          ),
-
-          //CallToAction('Discutons'),
-        ],
-      ),
-    );
-  }
+  ServiceModel({
+    this.id,
+    this.name,
+    this.headlineName,
+    this.image,
+    this.description,
+    this.skills,
+    this.pricing,
+    this.experience,
+  });
 }
+
+final backend = ServiceModel(
+  id: 1,
+  name: 'Développement ',
+  headlineName: 'Web ',
+  image: 'images/mac_code.png',
+  pricing: "400",
+  experience: "6 ans",
+  description: "Revendre son bien peut s’avérer être un parcours "
+      "du combattant. C’est pour cela qu’une start-up française "
+      "a développé une appli qui permet d’estimer et revendre "
+      "efficacement ses biens : Valoo. Tout juste lancée, Valoo "
+      "est unique dans son genre et présente de multiples avantages.",
+  skills: [
+    "images/python.png",
+    "images/javascript.png",
+    "images/docker.png",
+  ],
+);
+
+final mobile = ServiceModel(
+  id: 1,
+  name: 'Application ',
+  headlineName: 'Mobile',
+  image: 'images/iphone_code.png',
+  experience: "6 mois",
+  pricing: "300",
+  description: "Revendre son bien peut s’avérer être un parcours "
+      "du combattant. C’est pour cela qu’une start-up française "
+      "a développé une appli qui permet d’estimer et revendre "
+      "efficacement ses biens : Valoo. Tout juste lancée, Valoo "
+      "est unique dans son genre et présente de multiples avantages.",
+  skills: [
+    "images/flutter.png",
+    "images/apple.png",
+    "images/android.png",
+  ],
+);
+
+final formation = ServiceModel(
+  id: 1,
+  name: 'Formation ',
+  headlineName: 'Web ',
+  pricing: "600",
+  experience: "6 mois",
+  image: 'images/formation.png',
+  description: "Revendre son bien peut s’avérer être un parcours "
+      "du combattant. C’est pour cela qu’une start-up française "
+      "a développé une appli qui permet d’estimer et revendre "
+      "efficacement ses biens : Valoo. Tout juste lancée, Valoo "
+      "est unique dans son genre et présente de multiples avantages.",
+  skills: [
+    "images/python.png",
+    "images/javascript.png",
+  ],
+);
