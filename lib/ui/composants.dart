@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'buttons.dart';
+import '../routes.dart';
 
 class Headline1Section extends StatelessWidget {
   @override
@@ -52,13 +53,20 @@ class Headline1Section extends StatelessWidget {
               Text(
                 'Ingénieur en développement freelance, '
                 'je suis basé à Nantes et disponible pour vos projets web et mobile.',
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.subtitle1,
                 textAlign: textAlignment,
               ),
               SizedBox(
                 height: 30,
               ),
-              CallToAction('Discutons'),
+              FilledButton(
+                title: 'Discutons',
+                color: Theme.of(context).accentColor,
+                small: false,
+                action: () {
+                  Navigator.of(context).push(createRoute("contact"));
+                },
+              ),
             ],
           ),
         );
@@ -91,9 +99,9 @@ class Headline2Section extends StatelessWidget {
                 ? 16
                 : 21;
         return Container(
-          width: 600,
+          width: 1200,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               RichText(
@@ -113,7 +121,7 @@ class Headline2Section extends StatelessWidget {
               ),
               Text(
                 description,
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.subtitle2,
                 textAlign: textAlignment,
               ),
               SizedBox(
@@ -128,10 +136,10 @@ class Headline2Section extends StatelessWidget {
   }
 }
 
-class ShadowedCard extends StatelessWidget {
+class ShadowedCardold extends StatelessWidget {
   final Widget child;
 
-  ShadowedCard({this.child});
+  ShadowedCardold({this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -160,22 +168,19 @@ class ShadowedCard extends StatelessWidget {
   }
 }
 
-class ShadowedCardold extends StatelessWidget {
+class ShadowedCard extends StatelessWidget {
   final Widget child;
 
-  ShadowedCardold({this.child});
+  ShadowedCard({this.child});
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      //borderRadius: BorderRadius.circular(15.0),
-      shadowColor: Colors.grey.shade400, // added
+    return Card(
       color: Colors.transparent,
-      type: MaterialType.card,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30.0),
-      ),
-      elevation: 2,
+//      shape: RoundedRectangleBorder(
+//        borderRadius: BorderRadius.circular(30.0),
+//      ),
+      elevation: 3.0,
       child: child,
     );
   }

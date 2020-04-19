@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:website/ui/layout.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:html';
 
 class ContactPage extends StatelessWidget {
@@ -11,49 +10,10 @@ class ContactPage extends StatelessWidget {
       content: Row(
         children: <Widget>[
           Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    //Text("Conditions d'utilisation"),
-                    IconButton(
-                      icon: Icon(FontAwesomeIcons.twitter),
-                      onPressed: () {
-                        window.open(
-                            'https://twitter.com/jocelyngriselle/', 'twitter');
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(FontAwesomeIcons.linkedin),
-                      onPressed: () {
-                        window.open(
-                            'https://www.linkedin.com/in/jocelyngriselle/',
-                            'linkedin');
-                      },
-                    ),
-//                IconButton(
-//                  icon: Icon(FontAwesomeIcons.medium),
-//                  onPressed: () {},
-//                ),
-                    IconButton(
-                      icon: Icon(FontAwesomeIcons.github),
-                      onPressed: () {
-                        window.open(
-                            'https://github.com/jocelyngriselle/', 'github');
-                      },
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: 380,
-                  width: 280,
-                  child: Image.asset('images/contact.png'),
-                ),
-              ],
+            child: SizedBox(
+              height: 380,
+              width: 280,
+              child: Image.asset('images/contact.png'),
             ),
           ),
           ContactForm(),
@@ -95,7 +55,7 @@ class ContactFormState extends State<ContactForm> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               TextFormField(
-                style: TextStyle(fontSize: 21, height: 1.7),
+                style: Theme.of(context).textTheme.bodyText1,
                 decoration: const InputDecoration(
                   hintText: 'Quel est votre nom ?',
                   labelText: "Nom",
@@ -114,7 +74,7 @@ class ContactFormState extends State<ContactForm> {
                 height: 30,
               ),
               TextFormField(
-                style: TextStyle(fontSize: 21, height: 1.7),
+                style: Theme.of(context).textTheme.bodyText1,
                 decoration: const InputDecoration(
                   labelText: 'Prénom ( optionnel )',
                   labelStyle: TextStyle(fontSize: 21, height: 1.7),
@@ -128,7 +88,7 @@ class ContactFormState extends State<ContactForm> {
               TextFormField(
                 minLines: 4,
                 maxLines: null,
-                style: TextStyle(fontSize: 21, height: 1.7),
+                style: Theme.of(context).textTheme.bodyText1,
                 decoration: const InputDecoration(
                   hintText: 'Que voulez vous me dire ?',
                   labelText: "Message",
@@ -147,8 +107,8 @@ class ContactFormState extends State<ContactForm> {
                 height: 30,
               ),
               Center(
-                child: InkWell(
-                  onTap: () {
+                child: RaisedButton(
+                  onPressed: () {
                     // Validate returns true if the form is valid, or false
                     // otherwise.
                     if (_formKey.currentState.validate()) {
@@ -157,25 +117,22 @@ class ContactFormState extends State<ContactForm> {
                       Scaffold.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Votre message a bien été envoyé'),
-                          backgroundColor: Color.fromARGB(255, 31, 229, 146),
+                          backgroundColor: Theme.of(context).accentColor,
                         ),
                       );
                     }
                   },
+                  color: Theme.of(context).accentColor,
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 60, vertical: 15),
                     child: Text(
                       "Envoyer",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
-                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .button
+                          .copyWith(color: Colors.white),
                     ),
-                    decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 31, 229, 146),
-                        borderRadius: BorderRadius.circular(5)),
                   ),
                 ),
               ),

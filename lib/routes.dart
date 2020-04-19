@@ -6,23 +6,23 @@ import 'pages/services.dart';
 import 'pages/portofolio.dart';
 
 Widget getRoute(String name) {
-  switch (name) {
-    case "Acceuil":
+  switch (name.toLowerCase()) {
+    case "acceuil":
       {
         return HomePage();
       }
       break;
-    case "Contact":
+    case "contact":
       {
         return ContactPage();
       }
       break;
-    case "Services":
+    case "services":
       {
         return ServicesPage();
       }
       break;
-    case "Projets":
+    case "projets":
       {
         return PortofolioPage();
       }
@@ -32,6 +32,7 @@ Widget getRoute(String name) {
 
 Route createRoute(String name) {
   return PageRouteBuilder(
+    transitionDuration: Duration(milliseconds: 500),
     pageBuilder: (context, animation, secondaryAnimation) => getRoute(name),
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       var textOpacity = Tween(begin: 0.0, end: 1.0).animate(

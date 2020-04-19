@@ -2,11 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dart:html';
 import '../routes.dart';
 import '../ui/theme.dart';
 
 class NavigationBar extends StatelessWidget {
-  const NavigationBar({Key key}) : super(key: key);
+  NavigationBar({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ScreenTypeLayout(
@@ -18,97 +19,51 @@ class NavigationBar extends StatelessWidget {
 }
 
 class NavigationBarMobile extends StatelessWidget {
-  const NavigationBarMobile({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: navBarHeight, // TODO too much height ?
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          NavBarLogo(),
-          IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-          ),
-        ],
-      ),
+    return AppBar(
+      leading: NavBarLogo(),
+      title: Socials(),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      centerTitle: false,
+      actions: [
+        IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+          },
+        ),
+      ],
     );
   }
 }
 
 class NavigationBarDesktop extends StatelessWidget {
+  double elevation;
+  NavigationBarDesktop({this.elevation});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: navBarHeight,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          NavBarLogo(),
-          ButtonBar(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              NavBarItem(
-                'Services',
-                key: UniqueKey(),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              NavBarItem(
-                'Projets',
-                key: UniqueKey(),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              OutlineButton(
-                color: Theme.of(context).accentColor,
-                borderSide: BorderSide(
-                    width: 2.0, color: Theme.of(context).accentColor),
-                highlightedBorderColor: Theme.of(context).accentColor,
-                onPressed: () {
-                  Navigator.of(context).push(
-                    createRoute('Contact'),
-                  );
-                },
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        "Contact ",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          color: Theme.of(context).accentColor,
-                          //fontWeight: FontWeight.w800,
-                          //color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Icon(
-                        FontAwesomeIcons.comment,
-                        color: Theme.of(context).accentColor,
-                      )
-                    ],
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
+    return AppBar(
+      leading: NavBarLogo(),
+      title: Socials(),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      centerTitle: false,
+      elevation: elevation,
+      actions: [
+        ButtonBarItem(
+          'SERVICES',
+          key: UniqueKey(),
+        ),
+        ButtonBarItem(
+          'PROJETS',
+          key: UniqueKey(),
+        ),
+        ButtonBarItem(
+          'CONTACT',
+          key: UniqueKey(),
+        ),
+      ],
     );
   }
 }
@@ -157,10 +112,10 @@ class NavigationDrawer extends StatelessWidget {
       child: Column(
         children: <Widget>[
           NavigationDrawerHeader(),
-          DrawerItem('Home', Icons.home),
-          DrawerItem('Services', Icons.build),
-          DrawerItem('Projets', Icons.image),
-          DrawerItem('Contact', Icons.contact_mail),
+          DrawerItem('HOME', Icons.home),
+          DrawerItem('SERVICES', Icons.build),
+          DrawerItem('PROJETS', Icons.image),
+          DrawerItem('CONTACT', Icons.contact_mail),
         ],
       ),
     );
@@ -179,17 +134,17 @@ class DrawerItem extends StatelessWidget {
         children: <Widget>[
           Icon(icon),
           SizedBox(width: 30),
-          NavBarItem(title),
+          ButtonBarItem(title),
         ],
       ),
     );
   }
 }
 
-class NavBarItem extends StatelessWidget {
+class ButtonBarItem extends StatelessWidget {
   final String title;
 
-  const NavBarItem(
+  const ButtonBarItem(
     this.title, {
     Key key,
   }) : super(key: key);
@@ -197,19 +152,12 @@ class NavBarItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlatButton(
-      //color: Color.fromARGB(255, 31, 229, 146),
       onPressed: () {
         Navigator.of(context).push(
           createRoute(title),
         );
       },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-        child: Text(title, style: Theme.of(context).textTheme.button),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-        ),
-      ),
+      child: Text(title, style: Theme.of(context).textTheme.bodyText1),
     );
   }
 }
@@ -217,17 +165,64 @@ class NavBarItem extends StatelessWidget {
 class NavBarLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 55,
-      width: 55,
-      child: InkResponse(
-        onTap: () {
-          Navigator.of(context).push(
-            createRoute('Acceuil'),
-          );
-        },
-        child: Image.asset('images/logo.png'),
-      ),
+    return InkResponse(
+      onTap: () {
+        Navigator.of(context).push(
+          createRoute('ACCEUIL'),
+        );
+      },
+      child: Image.asset('images/blink.png'),
+    );
+  }
+}
+
+class Socials extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        //Text("Conditions d'utilisation"),
+        IconButton(
+          icon: Icon(
+            FontAwesomeIcons.twitter,
+            color: textColor,
+          ),
+          onPressed: () {
+            window.open('https://twitter.com/jocelyngriselle/', 'twitter');
+          },
+        ),
+        IconButton(
+          icon: Icon(
+            FontAwesomeIcons.linkedin,
+            color: textColor,
+          ),
+          onPressed: () {
+            window.open(
+                'https://www.linkedin.com/in/jocelyngriselle/', 'linkedin');
+          },
+        ),
+        IconButton(
+          icon: Icon(
+            FontAwesomeIcons.medium,
+            color: textColor,
+          ),
+          onPressed: () {
+            window.open('https://medium.com/@jocelyngriselle', 'medium');
+          },
+        ),
+        IconButton(
+          icon: Icon(
+            FontAwesomeIcons.github,
+            color: textColor,
+          ),
+          onPressed: () {
+            window.open('https://github.com/jocelyngriselle/', 'github');
+          },
+        ),
+      ],
     );
   }
 }

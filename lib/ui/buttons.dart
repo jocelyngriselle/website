@@ -1,88 +1,65 @@
 import 'package:flutter/material.dart';
-import 'package:responsive_builder/responsive_builder.dart';
-import '../routes.dart';
 
-class CallToActionDesktop extends StatelessWidget {
+class FilledButton extends StatelessWidget {
   final String title;
-  const CallToActionDesktop(this.title);
+  final bool small;
+  final Color color;
+  final Function action;
+  const FilledButton({this.title, this.action, this.color, this.small: true});
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      color: Theme.of(context).accentColor,
-      onPressed: () {
-        Navigator.of(context).push(createRoute(title));
-      },
+    return FlatButton(
+      color: color,
+      onPressed: action,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
+        constraints:
+            small ? BoxConstraints(minWidth: 24) : BoxConstraints(minWidth: 32),
+        padding: EdgeInsets.symmetric(
+            horizontal: small ? 16 : 24, vertical: small ? 8 : 16),
         child: Text(
           title,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w800,
-            color: Colors.white,
-          ),
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
+          style: Theme.of(context).textTheme.button.copyWith(
+                color: Colors.white,
+                fontSize: small ? 16 : 18,
+              ),
         ),
       ),
     );
   }
 }
 
-class CallToAction extends StatelessWidget {
+class TransparentButton extends StatelessWidget {
   final String title;
-  const CallToAction(this.title);
+  final bool small;
+  final Function action;
+  const TransparentButton({
+    this.title,
+    this.action,
+    this.small: true,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ScreenTypeLayout(
-      mobile: CallToActionDesktop(title),
-      tablet: CallToActionDesktop(title),
-      desktop: CallToActionDesktop(title),
-    );
-  }
-}
-
-class OutlineButtonDesktop extends StatelessWidget {
-  final String title;
-  const OutlineButtonDesktop(this.title);
-
-  @override
-  Widget build(BuildContext context) {
-    return OutlineButton(
-      borderSide: BorderSide(width: 2.0, color: Theme.of(context).accentColor),
+    return FlatButton(
       color: Colors.transparent,
-      highlightedBorderColor: Theme.of(context).accentColor,
-      onPressed: () {
-        Navigator.of(context).push(createRoute(title));
-      },
+      onPressed: action,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 15),
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w400,
-            color: Theme.of(context).accentColor,
+        constraints: small
+            ? BoxConstraints(minWidth: 150)
+            : BoxConstraints(minWidth: 250),
+        padding: EdgeInsets.symmetric(
+            horizontal: small ? 16 : 24, vertical: small ? 8 : 16),
+        child: Center(
+          child: Text(
+            title,
+            style: Theme.of(context).textTheme.button.copyWith(
+                  color: Theme.of(context).accentColor,
+                  fontSize: small ? 16 : 18,
+                ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class OutlineButtonToAction extends StatelessWidget {
-  final String title;
-  const OutlineButtonToAction(this.title);
-
-  @override
-  Widget build(BuildContext context) {
-    return ScreenTypeLayout(
-      mobile: OutlineButtonDesktop(title),
-      tablet: OutlineButtonDesktop(title),
-      desktop: OutlineButtonDesktop(title),
     );
   }
 }

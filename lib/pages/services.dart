@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+import '../routes.dart';
 import '../ui/layout.dart';
 import '../ui/composants.dart';
 import '../ui/buttons.dart';
+import '../ui/theme.dart';
 
 class ServicesPage extends StatelessWidget {
   @override
@@ -26,6 +28,9 @@ class ServicesContentDesktop extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
+        SizedBox(
+          height: navBarHeight,
+        ),
         Headline2Section(
           name: 'Je peux vous rendre',
           headlineName: 'Service',
@@ -33,6 +38,9 @@ class ServicesContentDesktop extends StatelessWidget {
               'Innovative experiences that help companies recapture the market from their competitors.',
         ),
         Expanded(child: Services()),
+        SizedBox(
+          height: navBarHeight,
+        ),
       ],
     );
   }
@@ -178,8 +186,19 @@ class ServiceCard extends StatelessWidget {
                 Align(
                     alignment: Alignment.bottomCenter,
                     child: main
-                        ? CallToAction("Contact")
-                        : OutlineButtonToAction('Contact'))
+                        ? FilledButton(
+                            title: "Contact",
+                            color: Theme.of(context).accentColor,
+                            action: () {
+                              Navigator.of(context)
+                                  .push(createRoute("contact"));
+                            })
+                        : TransparentButton(
+                            title: "Contact",
+                            action: () {
+                              Navigator.of(context)
+                                  .push(createRoute("contact"));
+                            }))
               ],
             ),
           ),

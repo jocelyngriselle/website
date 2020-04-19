@@ -18,8 +18,7 @@ class AnimationsPlayground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Layout(
-      navbar: AnimatedNavbar(),
+    return PageLayout(
       contentHeight: 500,
       content: ScreenTypeLayout(
         desktop: DesktopAnimatedApp(),

@@ -3,9 +3,11 @@ import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:website/ui/theme.dart';
 
 import '../ui/layout.dart';
 import '../ui/composants.dart';
+import '../ui/buttons.dart';
 
 class PortofolioPage extends StatelessWidget {
   @override
@@ -16,7 +18,7 @@ class PortofolioPage extends StatelessWidget {
         tablet: PortofolioContentMobile(),
         mobile: PortofolioContentMobile(),
       ),
-      contentHeight: 1300,
+      contentHeight: 1400,
     );
   }
 }
@@ -32,7 +34,7 @@ class PortofolioContentMobile extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         Headline2Section(
-          name: 'Selection de',
+          name: 'Laissezz moi vous présenter quelques',
           headlineName: 'Projets',
           description:
               "A closer look at the mission, impact, and outcome of every featured project.",
@@ -51,13 +53,19 @@ class PortofolioContentDesktop extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
+        SizedBox(
+          height: navBarHeight,
+        ),
         Headline2Section(
-          name: 'Selection de',
+          name: 'Laissez moi vous présenter quelques',
           headlineName: 'Projets',
           description:
               "A closer look at the mission, impact, and outcome of every featured project.",
         ),
         Expanded(child: Projects()),
+        SizedBox(
+          height: navBarHeight,
+        ),
       ],
     );
   }
@@ -77,7 +85,7 @@ class Projects extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Project(
-              project: mixity,
+              project: creative,
             ),
             Project(
               project: openClassroom,
@@ -90,7 +98,7 @@ class Projects extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Project(
-              project: creative,
+              project: mixity,
             ),
             Project(
               project: valoo,
@@ -142,8 +150,8 @@ class ProjectState extends State<Project> {
   final height = 500.0; // TODO mobile height : 300 ?
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Container(
+      //padding: const EdgeInsets.all(8.0),
       child: Container(
         height: height,
         width: width,
@@ -157,12 +165,10 @@ class ProjectState extends State<Project> {
                 width: width,
                 child: Hero(
                   tag: "avatar_" + widget.project.id.toString(),
-                  child: ShadowedCard(
-                    child: Image.asset(
-                      widget.project.image,
-                      //fit: BoxFit.fitWidth,
-                      fit: BoxFit.cover,
-                    ),
+                  child: Image.asset(
+                    widget.project.image,
+                    //fit: BoxFit.fitWidth,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
@@ -197,7 +203,7 @@ class ProjectState extends State<Project> {
                   ),
                   Container(
                     color: Colors.white,
-                    height: 1 / 5 * height + 50,
+                    height: 2 / 5 * height - 58,
                     width: width,
                   ),
                 ],
@@ -208,7 +214,7 @@ class ProjectState extends State<Project> {
                     height: 3 / 5 * height,
                   ),
                   Container(
-                    height: 2 / 5 * height,
+                    height: 2 / 5 * height - 8,
                     width: width,
                     color: Colors.transparent,
                     padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
@@ -219,53 +225,28 @@ class ProjectState extends State<Project> {
                       children: <Widget>[
                         Text(
                           widget.project.client,
-                          style: TextStyle(
-                            color: widget.project.color,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 24,
-                            fontFamily: 'Open sans',
-                          ),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline5
+                              .copyWith(color: widget.project.color),
                         ),
                         Text(
                           "${widget.project.role} - ${widget.project.duration}",
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 18,
-                            fontFamily: 'Open sans',
-                          ),
+                          style: Theme.of(context).textTheme.subtitle2,
                         ),
-                        OutlineButton(
-//                          shape: RoundedRectangleBorder(
-//                            borderRadius: BorderRadius.circular(18.0),
-//                            //side: BorderSide(color: Colors.red)
-//                          ),
-                          borderSide: BorderSide(
-                              width: 2.0, color: widget.project.color),
-                          color: widget.project.color,
-                          highlightedBorderColor: widget.project.color,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'Details',
-                              style: TextStyle(
-                                color: widget.project.color,
-                                fontSize: 18,
-                                fontFamily: 'Open sans',
-                              ),
-                            ),
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProjectDetail(
-                                  project: widget.project,
+                        FilledButton(
+                            color: widget.project.color,
+                            title: 'Détails',
+                            action: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProjectDetail(
+                                    project: widget.project,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        ),
+                              );
+                            }),
                       ],
                     ),
                   ),
@@ -288,9 +269,110 @@ class ProjectDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Layout(
       contentHeight: 900,
-      navbar: HeroNavBar(
-        project: project,
-      ), // AnimatedNavbar
+      title: ButtonBar(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            child:
+                Text(project.role, style: Theme.of(context).textTheme.overline),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            child: Text("-", style: Theme.of(context).textTheme.overline),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            child: Text(project.status,
+                style: Theme.of(context).textTheme.overline),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            child: Text("-", style: Theme.of(context).textTheme.overline),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            child: Text(project.duration,
+                style: Theme.of(context).textTheme.overline),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            child: Text("-", style: Theme.of(context).textTheme.overline),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            child: Text(project.location,
+                style: Theme.of(context).textTheme.overline),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+        ],
+      ),
+      leading: BackButton(
+        color: Colors.black,
+      ),
+      actions: [
+        project.canVisit
+            ? ButtonBar(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  RaisedButton(
+                    color: project.color,
+                    onPressed: () {
+                      window.open(project.url, 'url');
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 0),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            "VISITER",
+                            style: Theme.of(context)
+                                .textTheme
+                                .button
+                                .copyWith(color: Colors.white),
+                          ),
+//                          SizedBox(
+//                            width: 10,
+//                          ),
+//                          Icon(
+//                            FontAwesomeIcons.eye,
+//                            color: project.color,
+//                          )
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : Container(),
+      ],
+//      navbar: HeroNavBar(
+//        project: project,
+//      ), // AnimatedNavbar
       content: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
@@ -387,7 +469,7 @@ class ProjectDescription extends StatelessWidget {
         ),
         Text(
           project.description,
-          style: TextStyle(fontSize: 21, height: 1.7),
+          style: Theme.of(context).textTheme.bodyText1,
           textAlign: TextAlign.left,
         ),
         SizedBox(
@@ -490,131 +572,6 @@ class TestimonyRow extends StatelessWidget {
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class HeroNavBar extends StatelessWidget {
-  final ProjectModel project;
-
-  HeroNavBar({this.project});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          ButtonBar(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              BackButton(),
-              Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: Text(project.role,
-                    style: Theme.of(context).textTheme.overline),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-              Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: Text("-", style: Theme.of(context).textTheme.overline),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-              Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: Text(project.status,
-                    style: Theme.of(context).textTheme.overline),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-              Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: Text("-", style: Theme.of(context).textTheme.overline),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-              Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: Text(project.duration,
-                    style: Theme.of(context).textTheme.overline),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-              Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: Text("-", style: Theme.of(context).textTheme.overline),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-              Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: Text(project.location,
-                    style: Theme.of(context).textTheme.overline),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-            ],
-          ),
-          project.canVisit
-              ? ButtonBar(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    OutlineButton(
-                      borderSide: BorderSide(color: project.color),
-                      color: project.color,
-                      highlightedBorderColor: project.color,
-                      onPressed: () {
-                        window.open(project.url, 'url');
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 15),
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              "Visiter",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
-                                color: project.color,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Icon(
-                              FontAwesomeIcons.eye,
-                              color: project.color,
-                            )
-                          ],
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              : Container(),
         ],
       ),
     );
