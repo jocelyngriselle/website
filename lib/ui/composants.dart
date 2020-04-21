@@ -3,7 +3,55 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'buttons.dart';
 import '../routes.dart';
 
-class Headline1Section extends StatelessWidget {
+class Headline1Section extends StatefulWidget {
+  @override
+  _Headline1SectionState createState() => _Headline1SectionState();
+}
+
+class _Headline1SectionState extends State<Headline1Section>
+    with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+
+  List<Animation<Offset>> textTranslations;
+  List<Animation<double>> textOpacities;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+    textTranslations = [];
+    textOpacities = [];
+
+    for (var i = 1; i < 4; i++) {
+      textTranslations.add(
+        Tween(
+          begin: Offset(0.0, 4.0),
+          end: Offset(0.0, 0.0),
+        ).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve:
+                Interval(0.1 * (3 - i), 0.33 * (3 - i), curve: Curves.linear),
+          ),
+        ),
+      );
+      textOpacities.add(
+        Tween(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve:
+                Interval(0.1 * (3 - i), 0.25 * (3 - i), curve: Curves.linear),
+          ),
+        ),
+      );
+    }
+    Future.delayed(Duration(milliseconds: 800))
+        .then((onValue) => _controller.forward());
+  }
+
   @override
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
@@ -12,14 +60,6 @@ class Headline1Section extends StatelessWidget {
             sizingInformation.deviceScreenType == DeviceScreenType.Desktop
                 ? TextAlign.left
                 : TextAlign.center;
-        var headline1 =
-            sizingInformation.deviceScreenType == DeviceScreenType.Desktop
-                ? Theme.of(context).textTheme.headline1
-                : Theme.of(context).textTheme.headline3;
-        var headline2 =
-            sizingInformation.deviceScreenType == DeviceScreenType.Desktop
-                ? Theme.of(context).textTheme.headline2
-                : Theme.of(context).textTheme.headline4;
         var crossAxisAlignment =
             sizingInformation.deviceScreenType == DeviceScreenType.Desktop
                 ? CrossAxisAlignment.start
@@ -30,42 +70,60 @@ class Headline1Section extends StatelessWidget {
             crossAxisAlignment: crossAxisAlignment,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              RichText(
-                textAlign: textAlignment,
-                text: TextSpan(
-                  text: "Jocelyn Griselle,\n",
-                  style: headline1,
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: 'développeur ',
-                      style: headline1,
+              SlideTransition(
+                position: textTranslations[2],
+                child: FadeTransition(
+                  opacity: textOpacities[2],
+                  child: RichText(
+                    textAlign: textAlignment,
+                    text: TextSpan(
+                      text: "Jocelyn Griselle,\n",
+                      style: Theme.of(context).textTheme.headline1,
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: 'développeur ',
+                          style: Theme.of(context).textTheme.headline1,
+                        ),
+                        TextSpan(
+                          text: ' fullstack ', //' backend & mobile ',
+                          style: Theme.of(context).textTheme.headline2,
+                        ),
+                      ],
                     ),
-                    TextSpan(
-                      text: ' fullstack ', //' backend & mobile ',
-                      style: headline2,
-                    ),
-                  ],
+                  ),
                 ),
               ),
               SizedBox(
                 height: 30,
               ),
-              Text(
-                'Ingénieur en développement freelance, '
-                'je suis basé à Nantes et disponible pour vos projets web et mobile.',
-                style: Theme.of(context).textTheme.subtitle1,
-                textAlign: textAlignment,
+              SlideTransition(
+                position: textTranslations[1],
+                child: FadeTransition(
+                  opacity: textOpacities[1],
+                  child: Text(
+                    'Ingénieur en développement freelance, '
+                    'je suis basé à Nantes et disponible pour vos projets web et mobile.',
+                    style: Theme.of(context).textTheme.subtitle1,
+                    textAlign: textAlignment,
+                  ),
+                ),
               ),
               SizedBox(
                 height: 30,
               ),
-              FilledButton(
-                title: 'Discutons',
-                color: Theme.of(context).accentColor,
-                small: false,
-                action: () {
-                  Navigator.of(context).push(createRoute("contact"));
-                },
+              SlideTransition(
+                position: textTranslations[0],
+                child: FadeTransition(
+                  opacity: textOpacities[0],
+                  child: FilledButton(
+                    title: 'Discutons',
+                    color: Theme.of(context).accentColor,
+                    small: false,
+                    action: () {
+                      Navigator.of(context).push(createRoute("contact"));
+                    },
+                  ),
+                ),
               ),
             ],
           ),
@@ -176,7 +234,7 @@ class ShadowedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.transparent,
+      color: Colors.white,
 //      shape: RoundedRectangleBorder(
 //        borderRadius: BorderRadius.circular(30.0),
 //      ),

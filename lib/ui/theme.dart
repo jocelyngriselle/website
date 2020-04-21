@@ -55,8 +55,8 @@ class MyTheme {
             color: accentColor,
           ),
           caption: TextStyle(
-            fontSize: 21.0,
-            color: textColor,
+            fontSize: 14.0,
+            color: Colors.grey.shade800,
             fontStyle: FontStyle.italic,
             fontWeight: FontWeight.w300,
           ),
@@ -91,18 +91,13 @@ class MyTheme {
   }
 }
 
-class CustomTextStyle {
-  static TextStyle display5(BuildContext context) {
-    return Theme.of(context).textTheme.display4.copyWith(fontSize: 192.0);
-  }
-}
-
-final primaryColor = Colors.white;
-final accentColor = Color.fromARGB(255, 31, 229, 146);
+final primaryColor = Color.fromRGBO(19, 137, 253, 1);
+//final accentColor = Color.fromARGB(255, 31, 229, 146);
+final accentColor = Color.fromRGBO(19, 137, 253, 1);
 final backgroundColor = Color.fromRGBO(248, 249, 250, 1);
 final textColor = Color.fromRGBO(74, 74, 74, 1);
 const marginRight = 70.0;
 const marginLeft = 70.0;
 const footerSize = 80.0;
-const navBarHeight = 80.0;
+const navBarHeight = 70.0;
 const maxWidth = 1350.0;

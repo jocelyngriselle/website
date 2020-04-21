@@ -157,7 +157,7 @@ class ButtonBarItem extends StatelessWidget {
           createRoute(title),
         );
       },
-      child: Text(title, style: Theme.of(context).textTheme.bodyText1),
+      child: Text(title, style: Theme.of(context).textTheme.bodyText2),
     );
   }
 }

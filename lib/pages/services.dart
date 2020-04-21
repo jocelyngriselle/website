@@ -5,6 +5,7 @@ import '../ui/layout.dart';
 import '../ui/composants.dart';
 import '../ui/buttons.dart';
 import '../ui/theme.dart';
+import 'package:flutter/scheduler.dart';
 
 class ServicesPage extends StatelessWidget {
   @override
@@ -37,7 +38,7 @@ class ServicesContentDesktop extends StatelessWidget {
           description:
               'Innovative experiences that help companies recapture the market from their competitors.',
         ),
-        Expanded(child: Services()),
+        Expanded(child: DesktopServices()),
         SizedBox(
           height: navBarHeight,
         ),
@@ -59,23 +60,71 @@ class ServicesContentMobile extends StatelessWidget {
   }
 }
 
-class Services extends StatelessWidget {
+class DesktopServices extends StatefulWidget {
   @override
+  _DesktopServicesState createState() => _DesktopServicesState();
+}
+
+class _DesktopServicesState extends State<DesktopServices>
+    with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+  Animation<double> mainScaling;
+  Animation<double> sideScaling;
+  List<ServiceModel> services;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    );
+    services = [formation, backend, mobile];
+    mainScaling = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Interval(0.6, 1.0, curve: Curves.easeIn),
+      ),
+    );
+    sideScaling = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Interval(0.1, 0.5, curve: Curves.easeIn),
+      ),
+    );
+
+    if (SchedulerBinding.instance.schedulerPhase ==
+        SchedulerPhase.persistentCallbacks) {
+      SchedulerBinding.instance.addPostFrameCallback((_) =>
+          Future.delayed(Duration(milliseconds: 100))
+              .then((onValue) => _controller.forward()));
+    }
+  }
+
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        ServiceCard(
-          service: formation,
+        ScaleTransition(
+          scale: sideScaling,
+          child: ServiceCard(
+            service: formation,
+          ),
         ),
-        ServiceCard(
-          service: backend,
-          main: true,
+        ScaleTransition(
+          scale: mainScaling,
+          child: ServiceCard(
+            service: backend,
+            main: true,
+          ),
         ),
-        ServiceCard(
-          service: mobile,
+        ScaleTransition(
+          scale: sideScaling,
+          child: ServiceCard(
+            service: mobile,
+          ),
         ),
       ],
     );
@@ -233,7 +282,7 @@ class ServiceModel {
 final backend = ServiceModel(
   id: 1,
   name: 'Développement ',
-  headlineName: 'Web ',
+  headlineName: 'Web',
   image: 'images/mac_code.png',
   pricing: "400",
   experience: "6 ans",
@@ -271,7 +320,7 @@ final mobile = ServiceModel(
 final formation = ServiceModel(
   id: 1,
   name: 'Formation ',
-  headlineName: 'Web ',
+  headlineName: 'Web',
   pricing: "600",
   experience: "6 mois",
   image: 'images/formation.png',

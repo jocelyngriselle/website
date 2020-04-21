@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'ui/theme.dart';
-import 'pages/onboarding.dart';
+import 'pages/home.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
     precacheImage(AssetImage('images/logo.png'), context);
     precacheImage(AssetImage('images/hello.png'), context);
     precacheImage(AssetImage('images/contact.png'), context);
+    precacheImage(AssetImage('images/flutter_slide_1-layer_1.png'), context);
 
     precacheImage(AssetImage('images/mixity_project.png'), context);
     precacheImage(AssetImage('images/creative_project.png'), context);
@@ -39,13 +40,10 @@ class MyApp extends StatelessWidget {
     precacheImage(AssetImage('images/apple.png'), context);
     precacheImage(AssetImage('images/android.png'), context);
 
-    ThemeData theme = MyTheme.defaultTheme;
     return MaterialApp(
       title: 'Jocelyn Griselle',
-      theme: theme,
-      onGenerateRoute: (RouteSettings setting) {
-        return AnimationsPlayground.route();
-      },
+      theme: MyTheme.defaultTheme,
+      home: HomePage(),
     );
   }
 }

@@ -8,17 +8,18 @@ import 'package:website/ui/theme.dart';
 import '../ui/layout.dart';
 import '../ui/composants.dart';
 import '../ui/buttons.dart';
+import 'package:flutter/scheduler.dart';
 
 class PortofolioPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PageLayout(
       content: ScreenTypeLayout(
-        desktop: PortofolioContentDesktop(),
+        desktop: DesktopProjects(),
         tablet: PortofolioContentMobile(),
         mobile: PortofolioContentMobile(),
       ),
-      contentHeight: 1400,
+      contentHeight: 800,
     );
   }
 }
@@ -62,7 +63,129 @@ class PortofolioContentDesktop extends StatelessWidget {
           description:
               "A closer look at the mission, impact, and outcome of every featured project.",
         ),
-        Expanded(child: Projects()),
+        Expanded(child: DesktopProjects()),
+        SizedBox(
+          height: navBarHeight,
+        ),
+      ],
+    );
+  }
+}
+
+class DesktopProjects extends StatefulWidget {
+  @override
+  _DesktopProjectsState createState() => _DesktopProjectsState();
+}
+
+class _DesktopProjectsState extends State<DesktopProjects>
+    with SingleTickerProviderStateMixin {
+  AnimationController controller;
+
+  List<Animation<Offset>> imageTranslations;
+  List<Animation<double>> imageOpacities;
+
+  Animation<Offset> textTranslation;
+
+  Animation<double> textOpacity;
+  List<ProjectModel> projects;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
+    projects = [creative, valoo, openClassroom, mixity];
+    imageTranslations = [];
+    imageOpacities = [];
+
+    for (var i = projects.length; i > 0; i--) {
+      imageTranslations.add(
+        Tween(
+          begin: Offset(2.0, 0),
+          end: Offset(0.0, 0.0),
+        ).animate(
+          CurvedAnimation(
+            parent: controller,
+            curve: Interval(0.1 * (i), 0.25 * (i), curve: Curves.easeOutSine),
+          ),
+        ),
+      );
+      imageOpacities.add(
+        Tween(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: controller,
+            curve: Interval(0.1 * (i), 0.8, curve: Curves.easeIn),
+          ),
+        ),
+      );
+    }
+    textTranslation = Tween(
+      begin: Offset(0.0, 1.0),
+      end: Offset(0.0, 0.0),
+    ).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(0.54, 1.0, curve: Curves.ease),
+      ),
+    );
+    textOpacity = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: controller,
+        curve: Interval(0.54, 1.0, curve: Curves.linear),
+      ),
+    );
+
+    //controller.forward();
+    if (SchedulerBinding.instance.schedulerPhase ==
+        SchedulerPhase.persistentCallbacks) {
+      SchedulerBinding.instance.addPostFrameCallback((_) =>
+          Future.delayed(Duration(milliseconds: 100))
+              .then((onValue) => controller.forward()));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        SizedBox(
+          height: navBarHeight,
+        ),
+        SlideTransition(
+          position: textTranslation,
+          child: FadeTransition(
+            opacity: textOpacity,
+            child: Headline2Section(
+              name: 'Laissez moi vous présenter quelques',
+              headlineName: 'Projets',
+              description:
+                  "A closer look at the mission, impact, and outcome of every featured project.",
+            ),
+          ),
+        ),
+        Expanded(
+            child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [3, 2, 1, 0]
+                    .map(
+                      (index) => SlideTransition(
+                        position: imageTranslations[index],
+                        child: FadeTransition(
+                          opacity: imageOpacities[index],
+                          child: Project(
+                            project: projects[index],
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList())),
         SizedBox(
           height: navBarHeight,
         ),
@@ -74,36 +197,22 @@ class PortofolioContentDesktop extends StatelessWidget {
 class Projects extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Project(
-              project: creative,
-            ),
-            Project(
-              project: openClassroom,
-            ),
-          ],
+        Project(
+          project: creative,
         ),
-        Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Project(
-              project: mixity,
-            ),
-            Project(
-              project: valoo,
-            ),
-          ],
+        Project(
+          project: openClassroom,
+        ),
+        Project(
+          project: valoo,
+        ),
+        Project(
+          project: mixity,
         ),
       ],
     );
@@ -120,13 +229,13 @@ class ProjectsMobile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Project(
-            project: mixity,
-          ),
-          Project(
             project: openClassroom,
           ),
           Project(
             project: creative,
+          ),
+          Project(
+            project: mixity,
           ),
           Project(
             project: valoo,
@@ -146,8 +255,8 @@ class Project extends StatefulWidget {
 }
 
 class ProjectState extends State<Project> {
-  final width = 500.0; // TODO mobile width : 300 ?
-  final height = 500.0; // TODO mobile height : 300 ?
+  final width = 300.0; // TODO mobile width : 300 ?
+  final height = 450.0; // TODO mobile height : 300 ?
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -158,100 +267,126 @@ class ProjectState extends State<Project> {
         color: Colors.transparent,
         //constraints: BoxConstraints(minHeight: 1500, minWidth: 500),
         child: ShadowedCard(
-          child: Stack(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(
-                height: height,
+                height: height / 3,
                 width: width,
                 child: Hero(
                   tag: "avatar_" + widget.project.id.toString(),
                   child: Image.asset(
                     widget.project.image,
                     //fit: BoxFit.fitWidth,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.fitWidth,
                   ),
                 ),
               ),
-              Column(
-                children: <Widget>[
-                  Container(
-                    height: 1 / 5 * height + 50,
-                  ),
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    height: 2 / 5 * height,
-                    width: width,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment
-                            .bottomCenter, // 10% of the width, so there are ten blinds.
-                        colors: [
-                          widget.project.color.withOpacity(0),
-                          Colors.white,
-                        ], // whitish to gray
-                        // repeats the gradient over the canvas
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                children: <Widget>[
-                  Container(
-                    height: 3 / 5 * height + 50,
-                  ),
-                  Container(
-                    color: Colors.white,
-                    height: 2 / 5 * height - 58,
-                    width: width,
-                  ),
-                ],
-              ),
-              Column(
-                children: <Widget>[
-                  Container(
-                    height: 3 / 5 * height,
-                  ),
-                  Container(
-                    height: 2 / 5 * height - 8,
-                    width: width,
-                    color: Colors.transparent,
-                    padding: EdgeInsets.fromLTRB(20, 0, 20, 20),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
+//              Column(
+//                children: <Widget>[
+//                  Container(
+//                    height: 1 / 5 * height + 50,
+//                  ),
+//                  Container(
+//                    alignment: Alignment.bottomCenter,
+//                    height: 2 / 5 * height,
+//                    width: width,
+//                    decoration: BoxDecoration(
+//                      gradient: LinearGradient(
+//                        begin: Alignment.topCenter,
+//                        end: Alignment
+//                            .bottomCenter, // 10% of the width, so there are ten blinds.
+//                        colors: [
+//                          widget.project.color.withOpacity(0),
+//                          Colors.white,
+//                        ], // whitish to gray
+//                        // repeats the gradient over the canvas
+//                      ),
+//                    ),
+//                  ),
+//                ],
+//              ),
+//              Column(
+//                children: <Widget>[
+//                  Container(
+//                    height: 3 / 5 * height + 50,
+//                  ),
+//                  Container(
+//                    color: Colors.white,
+//                    height: 2 / 5 * height - 58,
+//                    width: width,
+//                  ),
+//                ],
+//              ),
+//              Column(
+//                children: <Widget>[
+//                  Container(
+//                    height: 1 / 2 * height,
+//                  ),
+              Container(
+                height: 2 / 3 * height - 8,
+                width: width,
+                color: Colors.white,
+                padding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          widget.project.client,
+                          "${widget.project.client}",
                           style: Theme.of(context)
                               .textTheme
-                              .headline5
+                              .headline6
                               .copyWith(color: widget.project.color),
                         ),
                         Text(
                           "${widget.project.role} - ${widget.project.duration}",
-                          style: Theme.of(context).textTheme.subtitle2,
+                          style: Theme.of(context).textTheme.caption,
                         ),
-                        FilledButton(
-                            color: widget.project.color,
-                            title: 'Détails',
-                            action: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ProjectDetail(
-                                    project: widget.project,
-                                  ),
-                                ),
-                              );
-                            }),
                       ],
                     ),
-                  ),
-                ],
+                    Text(
+                      "\" ${widget.project.testimonyDescription.substring(0, 100)} ... \"",
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.max,
+                      children: <Widget>[
+                        FilledButton(
+                          color: widget.project.color,
+                          title: 'Détails',
+                          action: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProjectDetail(
+                                  project: widget.project,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          height: 70,
+                          width: 70,
+                          child: Image.asset(widget.project.testimonyImage),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
+//                ],
+//              ),
             ],
             //),
           ),
@@ -491,88 +626,100 @@ class TestimonyRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 25),
-      width: 900,
+      //margin: EdgeInsets.symmetric(vertical: 0, horizontal: 25),
       decoration: new BoxDecoration(
-          color: project.color.withOpacity(0.3),
+        color: Colors.white,
+        borderRadius: new BorderRadius.only(
+          bottomRight: const Radius.circular(15.0),
+          topLeft: const Radius.circular(15.0),
+        ),
+      ),
+      child: Container(
+        decoration: new BoxDecoration(
+          color: project.color.withOpacity(0.25),
           borderRadius: new BorderRadius.only(
             bottomRight: const Radius.circular(15.0),
             topLeft: const Radius.circular(15.0),
-          )),
-      //color: Color.fromRGBO(242, 255, 243, 0.8),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: 130,
-                  width: 130,
-                  child: Image.asset(project.testimonyImage),
-                ),
-                Text(
-                  " ${project.testimonyName}",
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-                Text(
-                  " ${project.testimonyJob} ",
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6
-                      .copyWith(color: project.color),
-                )
-              ],
-            ),
           ),
-          SizedBox(
-            width: 40,
-          ),
-          Expanded(
-            flex: 3,
-            child: Container(
-              //color: Colors.orange,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Align(
-                    alignment: Alignment.bottomLeft,
-                    child: Icon(
-                      FontAwesomeIcons.quoteLeft,
-                      color: project.color,
+        ),
+        width: 900,
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 25),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 130,
+                      width: 130,
+                      child: Image.asset(project.testimonyImage),
                     ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    project.testimonyDescription,
-                    style: Theme.of(context).textTheme.caption,
-                    textAlign: TextAlign.left,
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Icon(
-                      FontAwesomeIcons.quoteRight,
-                      color: project.color,
+                    Text(
+                      " ${project.testimonyName}",
+                      style: Theme.of(context).textTheme.headline5,
                     ),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                ],
+                    Text(
+                      " ${project.testimonyJob} ",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline6
+                          .copyWith(color: project.color),
+                    )
+                  ],
+                ),
               ),
-            ),
+              SizedBox(
+                width: 40,
+              ),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  //color: Colors.orange,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 30,
+                      ),
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Icon(
+                          FontAwesomeIcons.quoteLeft,
+                          color: project.color,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        project.testimonyDescription,
+                        style: Theme.of(context).textTheme.overline,
+                        textAlign: TextAlign.left,
+                      ),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Icon(
+                          FontAwesomeIcons.quoteRight,
+                          color: project.color,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -621,7 +768,7 @@ class ProjectModel {
 }
 
 final valoo = ProjectModel(
-  id: 1,
+  id: 0,
   client: "Valoo",
   name: 'Assurance à la',
   headlineName: 'demande',
@@ -653,11 +800,11 @@ final valoo = ProjectModel(
   duration: "2 ans",
   location: "Nantes",
   status: "CDI",
-  color: Color.fromRGBO(100, 184, 178, 1),
+  color: Color.fromRGBO(94, 193, 173, 1),
 );
 
 final mixity = ProjectModel(
-  id: 2,
+  id: 1,
   client: "Mixity",
   name: 'Fullstack for',
   headlineName: 'Good',
@@ -692,11 +839,11 @@ final mixity = ProjectModel(
   location: "Nantes",
   status: "Freelance",
   url: "https://www.mixity.co/",
-  color: Color.fromRGBO(112, 166, 215, 1),
+  color: Color.fromRGBO(86, 166, 191, 1),
 );
 
 final openClassroom = ProjectModel(
-  id: 3,
+  id: 2,
   name: 'Cours à ciel',
   client: 'OpenClassroom',
   headlineName: 'Ouvert',
@@ -728,11 +875,11 @@ final openClassroom = ProjectModel(
   duration: "6 mois",
   location: "Télétravail",
   status: "Freelance",
-  color: Color.fromRGBO(106, 106, 225, 1),
+  color: Color.fromRGBO(109, 90, 227, 1),
 );
 
 final creative = ProjectModel(
-  id: 4,
+  id: 3,
   name: 'Oblique',
   client: "Creative Hacks",
   headlineName: 'Strategies',

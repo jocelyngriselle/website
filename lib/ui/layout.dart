@@ -3,6 +3,7 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'navigation.dart';
 import 'theme.dart';
 import 'dart:math';
+import 'package:flutter/scheduler.dart';
 
 class Layout extends StatefulWidget {
   final Widget content;
@@ -24,27 +25,79 @@ class Layout extends StatefulWidget {
   _LayoutState createState() => _LayoutState();
 }
 
-class _LayoutState extends State<Layout> {
+class _LayoutState extends State<Layout> with SingleTickerProviderStateMixin {
   final double targetElevation = 3;
   double _elevation = 0;
-  ScrollController _controller;
+  ScrollController _scrollController;
+
+  AnimationController _controller;
+  Animation<Offset> textTranslation;
+  Animation<Offset> navbarTranslation;
+  Animation<Offset> footerTranslation;
+  Animation<double> textOpacity;
+  Animation<double> imageOpacity;
+  Animation<Offset> imageTranslation;
 
   @override
   void initState() {
     super.initState();
-    _controller = ScrollController();
-    _controller.addListener(_scrollListener);
+
+    _scrollController = ScrollController();
+    _scrollController.addListener(_scrollListener);
+
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+    imageTranslation = Tween(
+      begin: Offset(0.0, 2.0),
+      end: Offset(0.0, 0.0),
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Interval(0.0, 0.5, curve: Curves.fastOutSlowIn),
+      ),
+    );
+    imageOpacity = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Interval(0.0, 1.0, curve: Curves.easeIn),
+      ),
+    );
+    textTranslation = Tween(
+      begin: Offset(0.0, 1.0),
+      end: Offset(0.0, 0.0),
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Interval(0.54, 1.0, curve: Curves.ease),
+      ),
+    );
+    textOpacity = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Interval(0.54, 1.0, curve: Curves.linear),
+      ),
+    );
+//    if (SchedulerBinding.instance.schedulerPhase ==
+//        SchedulerPhase.persistentCallbacks) {
+//      SchedulerBinding.instance.addPostFrameCallback((_) =>
+//          Future.delayed(Duration(milliseconds: 100))
+//              .then((onValue) => _controller.forward()));
+//    }
+    _controller.forward();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _controller?.removeListener(_scrollListener);
+    _scrollController?.removeListener(_scrollListener);
+    _scrollController?.dispose();
     _controller?.dispose();
   }
 
   void _scrollListener() {
-    double newElevation = _controller.offset > 1 ? targetElevation : 0;
+    double newElevation = _scrollController.offset > 1 ? targetElevation : 0;
     if (_elevation != newElevation) {
       setState(() {
         _elevation = newElevation;
@@ -54,6 +107,7 @@ class _LayoutState extends State<Layout> {
 
   @override
   Widget build(BuildContext context) {
+    ;
     return Scrollbar(
       //isAlwaysShown: true,
       child: ResponsiveBuilder(
@@ -74,35 +128,50 @@ class _LayoutState extends State<Layout> {
             builder:
                 (BuildContext context, BoxConstraints viewportConstraints) {
               return SingleChildScrollView(
-                controller: _controller,
+                controller: _scrollController,
                 child: Center(
-                  child: Container(
-                    constraints: BoxConstraints(
-                      maxWidth: maxWidth,
-                      minHeight: viewportConstraints.maxHeight,
-                    ),
-                    padding: const EdgeInsets.fromLTRB(
-                        marginLeft, 0.0, marginRight, 0.0),
-                    alignment: Alignment.topCenter,
-                    child: IntrinsicHeight(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                  child: IntrinsicHeight(
+                    //child: Expanded(
+                    child: Container(
+                      //color: Colors.green,
+                      padding: const EdgeInsets.fromLTRB(
+                          marginLeft / 2, 0.0, marginRight / 2, 0.0),
+                      constraints: BoxConstraints(
+                        maxWidth: maxWidth,
+                        minHeight: viewportConstraints.maxHeight,
+                      ),
+                      //color: Colors.red,
+                      height: max(
+                          widget.contentHeight, viewportConstraints.maxHeight),
+                      //color: Colors.orange,
+                      child: Stack(
+                        alignment: Alignment.center,
                         children: <Widget>[
-                          Expanded(
-                            child: Container(
-                              height: max(widget.contentHeight,
-                                  viewportConstraints.maxHeight - navBarHeight),
-                              //color: Colors.orange,
-                              child: widget.content,
+                          SlideTransition(
+                            position: imageTranslation,
+                            child: FadeTransition(
+                              opacity: imageOpacity,
+                              child: Container(
+                                //color: Colors.red,
+                                child: Image.asset(
+                                  'images/flutter_slide_2-layer_2bis.png',
+                                  fit: BoxFit.fitWidth,
+                                ),
+                              ),
                             ),
+                          ),
+                          Container(
+                            child: widget.content,
+                            padding: const EdgeInsets.fromLTRB(
+                                marginLeft / 2, 0.0, marginRight / 2, 0.0),
                           ),
                         ],
                       ),
                     ),
+                    // ),
                   ),
                 ),
+                //),
               );
             },
           ),
@@ -124,6 +193,10 @@ class PageLayout extends StatelessWidget {
       leading: NavBarLogo(),
       title: Socials(),
       actions: [
+        ButtonBarItem(
+          'Intro',
+          key: UniqueKey(),
+        ),
         ButtonBarItem(
           'Services',
           key: UniqueKey(),
