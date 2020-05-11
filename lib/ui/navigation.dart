@@ -6,75 +6,75 @@ import 'dart:html';
 import '../routes.dart';
 import '../ui/theme.dart';
 
-class NavigationBar extends StatelessWidget {
-  NavigationBar({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return ScreenTypeLayout(
-      mobile: NavigationBarMobile(),
-      tablet: NavigationBarMobile(),
-      desktop: NavigationBarDesktop(),
-    );
-  }
-}
-
-class NavigationBarMobile extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      leading: NavBarLogo(),
-      title: Socials(),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      centerTitle: false,
-      actions: [
-        IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {
-            Scaffold.of(context).openDrawer();
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class NavigationBarDesktop extends StatelessWidget {
-  double elevation;
-  NavigationBarDesktop({this.elevation});
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      leading: NavBarLogo(),
-      title: Socials(),
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      centerTitle: false,
-      elevation: elevation,
-      actions: [
-        ButtonBarItem(
-          'SERVICES',
-          key: UniqueKey(),
-        ),
-        ButtonBarItem(
-          'PROJETS',
-          key: UniqueKey(),
-        ),
-        ButtonBarItem(
-          'CONTACT',
-          key: UniqueKey(),
-        ),
-      ],
-    );
-  }
-}
+//class NavigationBar extends StatelessWidget {
+//  NavigationBar({Key key}) : super(key: key);
+//  @override
+//  Widget build(BuildContext context) {
+//    return ScreenTypeLayout(
+//      mobile: NavigationBarMobile(),
+//      tablet: NavigationBarMobile(),
+//      desktop: NavigationBarDesktop(),
+//    );
+//  }
+//}
+//
+//class NavigationBarMobile extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    return AppBar(
+//      leading: NavBarLogo(),
+//      title: Socials(),
+//      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+//      centerTitle: false,
+//      actions: [
+//        IconButton(
+//          icon: Icon(Icons.menu),
+//          onPressed: () {
+//            Scaffold.of(context).openDrawer();
+//          },
+//        ),
+//      ],
+//    );
+//  }
+//}
+//
+//class NavigationBarDesktop extends StatelessWidget {
+//  double elevation;
+//  NavigationBarDesktop({this.elevation});
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return AppBar(
+//      leading: NavBarLogo(),
+//      title: Socials(),
+//      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+//      centerTitle: false,
+//      elevation: elevation,
+//      actions: [
+//        ButtonBarItem(
+//          'SERVICES',
+//          key: UniqueKey(),
+//        ),
+//        ButtonBarItem(
+//          'PROJETS',
+//          key: UniqueKey(),
+//        ),
+//        ButtonBarItem(
+//          'CONTACT',
+//          key: UniqueKey(),
+//        ),
+//      ],
+//    );
+//  }
+//}
 
 class NavigationDrawerHeader extends StatelessWidget {
   const NavigationDrawerHeader({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 150,
-      color: Color.fromARGB(255, 31, 229, 146),
+      height: 100,
+      color: Theme.of(context).primaryColor,
       alignment: Alignment.center,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -110,12 +110,17 @@ class NavigationDrawer extends StatelessWidget {
         ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           NavigationDrawerHeader(),
-          DrawerItem('HOME', Icons.home),
-          DrawerItem('SERVICES', Icons.build),
-          DrawerItem('PROJETS', Icons.image),
-          DrawerItem('CONTACT', Icons.contact_mail),
+          DrawerItem('Acceuil', Icons.home),
+          DrawerItem('Services', Icons.build),
+          DrawerItem('Projets', Icons.image),
+          DrawerItem('Contact', Icons.contact_mail),
+          SizedBox(
+            height: 30,
+          ),
+          Socials(),
         ],
       ),
     );
@@ -129,10 +134,17 @@ class DrawerItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 30, top: 60),
+      padding: const EdgeInsets.only(left: 10, top: 10),
       child: Row(
         children: <Widget>[
-          Icon(icon),
+          IconButton(
+            icon: Icon(icon),
+            onPressed: () {
+              Navigator.of(context).push(
+                createRoute(title),
+              );
+            },
+          ),
           SizedBox(width: 30),
           ButtonBarItem(title),
         ],
@@ -168,7 +180,7 @@ class NavBarLogo extends StatelessWidget {
     return InkResponse(
       onTap: () {
         Navigator.of(context).push(
-          createRoute('ACCEUIL'),
+          createRoute('Acceuil'),
         );
       },
       child: Image.asset('images/blink.png'),

@@ -3,23 +3,54 @@ import 'package:website/ui/layout.dart';
 import 'dart:html';
 import 'package:flutter/scheduler.dart';
 import '../ui/buttons.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 class ContactPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return PageLayout(
-      contentHeight: 600,
-      content: Row(
-        children: <Widget>[
-          Expanded(
-            child: SizedBox(
-              height: 320,
-              width: 240,
-              child: Image.asset('images/contact.png'),
+    return ScreenTypeLayout(
+      desktop: PageLayout(
+        contentHeight: 600,
+        content: Row(
+          children: <Widget>[
+            Expanded(
+              child: SizedBox(
+                height: 320,
+                width: 240,
+                child: Image.asset('images/contact.png'),
+              ),
             ),
-          ),
-          ContactForm(),
-        ],
+            Container(
+              width: 700,
+              child: ContactForm(),
+            ),
+          ],
+        ),
+      ),
+      tablet: PageLayout(
+        contentHeight: 600,
+        content: Row(
+          children: <Widget>[
+            Expanded(
+              child: SizedBox(
+                height: 320,
+                width: 240,
+                child: Image.asset('images/contact.png'),
+              ),
+            ),
+            Container(
+              width: 400,
+              child: ContactForm(),
+            ),
+          ],
+        ),
+      ),
+      mobile: PageLayout(
+        contentHeight: 600,
+        content: Container(
+          width: 300,
+          child: ContactForm(),
+        ),
       ),
     );
   }
@@ -93,114 +124,111 @@ class ContactFormState extends State<ContactForm>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 700,
-      child: Center(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SlideTransition(
-                position: fieldTranslations[0],
-                child: FadeTransition(
-                  opacity: fieldOpacities[0],
-                  child: TextFormField(
-                    style: Theme.of(context).textTheme.bodyText1,
-                    decoration: const InputDecoration(
-                      hintText: 'Quel est votre nom ?',
-                      labelText: "Nom",
-                      labelStyle: TextStyle(fontSize: 21, height: 1.7),
-                      hintStyle: TextStyle(fontSize: 21, height: 1.7),
-                      errorStyle: TextStyle(fontSize: 21),
-                    ),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Veuillez renseigner ce champ';
+    return Center(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            SlideTransition(
+              position: fieldTranslations[0],
+              child: FadeTransition(
+                opacity: fieldOpacities[0],
+                child: TextFormField(
+                  style: Theme.of(context).textTheme.bodyText1,
+                  decoration: const InputDecoration(
+                    hintText: 'Quel est votre nom ?',
+                    labelText: "Nom",
+                    labelStyle: TextStyle(fontSize: 21, height: 1.7),
+                    hintStyle: TextStyle(fontSize: 21, height: 1.7),
+                    errorStyle: TextStyle(fontSize: 21),
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Veuillez renseigner ce champ';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            SlideTransition(
+              position: fieldTranslations[1],
+              child: FadeTransition(
+                opacity: fieldOpacities[1],
+                child: TextFormField(
+                  style: Theme.of(context).textTheme.bodyText1,
+                  decoration: const InputDecoration(
+                    labelText: 'Prénom ( optionnel )',
+                    labelStyle: TextStyle(fontSize: 21, height: 1.7),
+                    hintText: 'Quel est votre prénom ?',
+                    hintStyle: TextStyle(fontSize: 21, height: 1.7),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            SlideTransition(
+              position: fieldTranslations[2],
+              child: FadeTransition(
+                opacity: fieldOpacities[2],
+                child: TextFormField(
+                  minLines: 4,
+                  maxLines: null,
+                  style: Theme.of(context).textTheme.bodyText1,
+                  decoration: const InputDecoration(
+                    hintText: 'Que voulez vous me dire ?',
+                    labelText: "Message",
+                    labelStyle: TextStyle(fontSize: 21, height: 1.7),
+                    hintStyle: TextStyle(fontSize: 21, height: 1.7),
+                    errorStyle: TextStyle(fontSize: 21),
+                  ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Veuillez renseigner ce champ';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            SlideTransition(
+              position: buttonTranslation,
+              child: FadeTransition(
+                opacity: fieldOpacities[3],
+                child: Center(
+                  child: FilledButton(
+                    title: 'Envoyer',
+                    color: Theme.of(context).accentColor,
+                    small: false,
+                    action: () {
+                      // Validate returns true if the form is valid, or false
+                      // otherwise.
+                      if (_formKey.currentState.validate()) {
+                        // If the form is valid, display a Snackbar.
+                        // TODO send me an email
+                        Scaffold.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Votre message a bien été envoyé'),
+                            backgroundColor: Theme.of(context).accentColor,
+                          ),
+                        );
                       }
-                      return null;
                     },
                   ),
                 ),
               ),
-              SizedBox(
-                height: 30,
-              ),
-              SlideTransition(
-                position: fieldTranslations[1],
-                child: FadeTransition(
-                  opacity: fieldOpacities[1],
-                  child: TextFormField(
-                    style: Theme.of(context).textTheme.bodyText1,
-                    decoration: const InputDecoration(
-                      labelText: 'Prénom ( optionnel )',
-                      labelStyle: TextStyle(fontSize: 21, height: 1.7),
-                      hintText: 'Quel est votre prénom ?',
-                      hintStyle: TextStyle(fontSize: 21, height: 1.7),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              SlideTransition(
-                position: fieldTranslations[2],
-                child: FadeTransition(
-                  opacity: fieldOpacities[2],
-                  child: TextFormField(
-                    minLines: 4,
-                    maxLines: null,
-                    style: Theme.of(context).textTheme.bodyText1,
-                    decoration: const InputDecoration(
-                      hintText: 'Que voulez vous me dire ?',
-                      labelText: "Message",
-                      labelStyle: TextStyle(fontSize: 21, height: 1.7),
-                      hintStyle: TextStyle(fontSize: 21, height: 1.7),
-                      errorStyle: TextStyle(fontSize: 21),
-                    ),
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Veuillez renseigner ce champ';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              SlideTransition(
-                position: buttonTranslation,
-                child: FadeTransition(
-                  opacity: fieldOpacities[3],
-                  child: Center(
-                    child: FilledButton(
-                      title: 'Envoyer',
-                      color: Theme.of(context).accentColor,
-                      small: false,
-                      action: () {
-                        // Validate returns true if the form is valid, or false
-                        // otherwise.
-                        if (_formKey.currentState.validate()) {
-                          // If the form is valid, display a Snackbar.
-                          // TODO send me an email
-                          Scaffold.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Votre message a bien été envoyé'),
-                              backgroundColor: Theme.of(context).accentColor,
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

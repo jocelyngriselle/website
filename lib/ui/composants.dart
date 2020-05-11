@@ -252,19 +252,24 @@ class Skill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 5.0),
-      child: Center(
-        child: SizedBox(
-          height: small ? 70 : 100,
-          width: small ? 75 : 100,
-          child: Image.asset(
-            this.image,
-            fit: BoxFit.contain,
+    return ResponsiveBuilder(builder: (context, sizingInformation) {
+      var ratio = sizingInformation.deviceScreenType == DeviceScreenType.Desktop
+          ? 1.0
+          : 0.6;
+      return Container(
+        padding: EdgeInsets.symmetric(horizontal: 5.0),
+        child: Center(
+          child: SizedBox(
+            height: ratio * (small ? 70 : 100),
+            width: ratio * (small ? 75 : 100),
+            child: Image.asset(
+              this.image,
+              fit: BoxFit.contain,
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 

@@ -13,13 +13,19 @@ import 'package:flutter/scheduler.dart';
 class PortofolioPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return PageLayout(
-      content: ScreenTypeLayout(
-        desktop: DesktopProjects(),
-        tablet: PortofolioContentMobile(),
-        mobile: PortofolioContentMobile(),
+    return ScreenTypeLayout(
+      desktop: PageLayout(
+        content: DesktopProjects(),
+        contentHeight: 800,
       ),
-      contentHeight: 800,
+      tablet: PageLayout(
+        content: PortofolioContentMobile(),
+        contentHeight: 2200,
+      ),
+      mobile: PageLayout(
+        content: PortofolioContentMobile(),
+        contentHeight: 2200,
+      ),
     );
   }
 }
@@ -30,17 +36,23 @@ class PortofolioContentMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
+        SizedBox(
+          height: navBarHeight,
+        ),
         Headline2Section(
-          name: 'Laissezz moi vous présenter quelques',
+          name: 'Présentation de quelques',
           headlineName: 'Projets',
           description:
               "A closer look at the mission, impact, and outcome of every featured project.",
         ),
         ProjectsMobile(),
+        SizedBox(
+          height: navBarHeight,
+        ),
       ],
     );
   }
@@ -58,7 +70,7 @@ class PortofolioContentDesktop extends StatelessWidget {
           height: navBarHeight,
         ),
         Headline2Section(
-          name: 'Laissez moi vous présenter quelques',
+          name: 'Présentation de quelques',
           headlineName: 'Projets',
           description:
               "A closer look at the mission, impact, and outcome of every featured project.",
@@ -222,26 +234,33 @@ class Projects extends StatelessWidget {
 class ProjectsMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Project(
-            project: openClassroom,
-          ),
-          Project(
-            project: creative,
-          ),
-          Project(
-            project: mixity,
-          ),
-          Project(
-            project: valoo,
-          ),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Project(
+          project: openClassroom,
+        ),
+        SizedBox(
+          height: 30,
+        ),
+        Project(
+          project: creative,
+        ),
+        SizedBox(
+          height: 30,
+        ),
+        Project(
+          project: mixity,
+        ),
+        SizedBox(
+          height: 30,
+        ),
+        Project(
+          project: valoo,
+        ),
+      ],
     );
   }
 }
@@ -260,12 +279,10 @@ class ProjectState extends State<Project> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      //padding: const EdgeInsets.all(8.0),
       child: Container(
         height: height,
         width: width,
         color: Colors.transparent,
-        //constraints: BoxConstraints(minHeight: 1500, minWidth: 500),
         child: ShadowedCard(
           child: Column(
             mainAxisSize: MainAxisSize.max,
@@ -279,52 +296,10 @@ class ProjectState extends State<Project> {
                   tag: "avatar_" + widget.project.id.toString(),
                   child: Image.asset(
                     widget.project.image,
-                    //fit: BoxFit.fitWidth,
                     fit: BoxFit.fitWidth,
                   ),
                 ),
               ),
-//              Column(
-//                children: <Widget>[
-//                  Container(
-//                    height: 1 / 5 * height + 50,
-//                  ),
-//                  Container(
-//                    alignment: Alignment.bottomCenter,
-//                    height: 2 / 5 * height,
-//                    width: width,
-//                    decoration: BoxDecoration(
-//                      gradient: LinearGradient(
-//                        begin: Alignment.topCenter,
-//                        end: Alignment
-//                            .bottomCenter, // 10% of the width, so there are ten blinds.
-//                        colors: [
-//                          widget.project.color.withOpacity(0),
-//                          Colors.white,
-//                        ], // whitish to gray
-//                        // repeats the gradient over the canvas
-//                      ),
-//                    ),
-//                  ),
-//                ],
-//              ),
-//              Column(
-//                children: <Widget>[
-//                  Container(
-//                    height: 3 / 5 * height + 50,
-//                  ),
-//                  Container(
-//                    color: Colors.white,
-//                    height: 2 / 5 * height - 58,
-//                    width: width,
-//                  ),
-//                ],
-//              ),
-//              Column(
-//                children: <Widget>[
-//                  Container(
-//                    height: 1 / 2 * height,
-//                  ),
               Container(
                 height: 2 / 3 * height - 8,
                 width: width,
@@ -385,10 +360,7 @@ class ProjectState extends State<Project> {
                   ],
                 ),
               ),
-//                ],
-//              ),
             ],
-            //),
           ),
         ),
       ),
@@ -402,129 +374,177 @@ class ProjectDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Layout(
-      contentHeight: 900,
-      title: ButtonBar(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            child:
-                Text(project.role, style: Theme.of(context).textTheme.overline),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+    return ScreenTypeLayout(
+      desktop: Layout(
+        contentHeight: 900,
+        title: ButtonBar(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              child: Text(project.role,
+                  style: Theme.of(context).textTheme.overline),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+              ),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            child: Text("-", style: Theme.of(context).textTheme.overline),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              child: Text("-", style: Theme.of(context).textTheme.overline),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+              ),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            child: Text(project.status,
-                style: Theme.of(context).textTheme.overline),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              child: Text(project.status,
+                  style: Theme.of(context).textTheme.overline),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+              ),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            child: Text("-", style: Theme.of(context).textTheme.overline),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              child: Text("-", style: Theme.of(context).textTheme.overline),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+              ),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            child: Text(project.duration,
-                style: Theme.of(context).textTheme.overline),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              child: Text(project.duration,
+                  style: Theme.of(context).textTheme.overline),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+              ),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            child: Text("-", style: Theme.of(context).textTheme.overline),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              child: Text("-", style: Theme.of(context).textTheme.overline),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+              ),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            child: Text(project.location,
-                style: Theme.of(context).textTheme.overline),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              child: Text(project.location,
+                  style: Theme.of(context).textTheme.overline),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+              ),
             ),
-          ),
-        ],
-      ),
-      leading: BackButton(
-        color: Colors.black,
-      ),
-      actions: [
-        project.canVisit
-            ? ButtonBar(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  RaisedButton(
-                    color: project.color,
-                    onPressed: () {
-                      window.open(project.url, 'url');
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 0),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            "VISITER",
-                            style: Theme.of(context)
-                                .textTheme
-                                .button
-                                .copyWith(color: Colors.white),
-                          ),
-//                          SizedBox(
-//                            width: 10,
-//                          ),
-//                          Icon(
-//                            FontAwesomeIcons.eye,
-//                            color: project.color,
-//                          )
-                        ],
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
+          ],
+        ),
+        leading: BackButton(
+          color: Colors.black,
+        ),
+        actions: [
+          project.canVisit
+              ? ButtonBar(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    RaisedButton(
+                      color: project.color,
+                      onPressed: () {
+                        window.open(project.url, 'url');
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 0),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              "Visiter",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .button
+                                  .copyWith(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              )
-            : Container(),
-      ],
-//      navbar: HeroNavBar(
-//        project: project,
-//      ), // AnimatedNavbar
-      content: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Container(
-            //color: Colors.pink,
-            child: ProjectDetailRow(
+                  ],
+                )
+              : Container(),
+        ],
+        content: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Container(
+              //color: Colors.pink,
+              child: ProjectDetailRow(
+                project: project,
+              ),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            TestimonyRow(
               project: project,
             ),
-          ),
-          SizedBox(
-            height: 50,
-          ),
-          TestimonyRow(
-            project: project,
-          ),
+          ],
+        ),
+      ),
+      mobile: Layout(
+        contentHeight: 1400,
+        title: Container(),
+        leading: BackButton(
+          color: Colors.black,
+        ),
+        actions: [
+          project.canVisit
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    RaisedButton(
+                      color: project.color,
+                      onPressed: () {
+                        window.open(project.url, 'url');
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 0),
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              "Visiter",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .button
+                                  .copyWith(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : Container(),
         ],
-        // ),
+        content: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              //color: Colors.pink,
+              child: ProjectDetailColumn(
+                project: project,
+              ),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            TestimonyColumn(
+              project: project,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -564,6 +584,48 @@ class ProjectDetailRow extends StatelessWidget {
                   fit: BoxFit.fitWidth,
                   //"images/creative_test2.png"
                 ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ProjectDetailColumn extends StatelessWidget {
+  final ProjectModel project;
+
+  ProjectDetailColumn({this.project});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          //color: Colors.blue,
+          width: 600,
+          child: ProjectDescription(
+            project: project,
+          ),
+        ),
+        SizedBox(
+          width: 50,
+        ),
+        ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: 500,
+            maxWidth: 400,
+          ),
+          child: Hero(
+            tag: "avatar_" + project.id.toString(),
+            child: ShadowedCard(
+              child: Image.asset(
+                project.image,
+                fit: BoxFit.fitWidth,
+                //"images/creative_test2.png"
               ),
             ),
           ),
@@ -715,6 +777,106 @@ class TestimonyRow extends StatelessWidget {
                       ),
                     ],
                   ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TestimonyColumn extends StatelessWidget {
+  final ProjectModel project;
+
+  TestimonyColumn({this.project});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: new BoxDecoration(
+        color: Colors.white,
+        borderRadius: new BorderRadius.only(
+          bottomRight: const Radius.circular(15.0),
+          topLeft: const Radius.circular(15.0),
+        ),
+      ),
+      child: Container(
+        decoration: new BoxDecoration(
+          color: project.color.withOpacity(0.25),
+          borderRadius: new BorderRadius.only(
+            bottomRight: const Radius.circular(15.0),
+            topLeft: const Radius.circular(15.0),
+          ),
+        ),
+        width: 900,
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 25),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(
+                    height: 130,
+                    width: 130,
+                    child: Image.asset(project.testimonyImage),
+                  ),
+                  Text(
+                    " ${project.testimonyName}",
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                  Text(
+                    " ${project.testimonyJob} ",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        .copyWith(color: project.color),
+                  )
+                ],
+              ),
+              SizedBox(
+                width: 40,
+              ),
+              Container(
+                //color: Colors.orange,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Icon(
+                        FontAwesomeIcons.quoteLeft,
+                        color: project.color,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      project.testimonyDescription,
+                      style: Theme.of(context).textTheme.overline,
+                      textAlign: TextAlign.left,
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Icon(
+                        FontAwesomeIcons.quoteRight,
+                        color: project.color,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                  ],
                 ),
               ),
             ],

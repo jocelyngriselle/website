@@ -85,7 +85,9 @@ class _LayoutState extends State<Layout> with SingleTickerProviderStateMixin {
 //          Future.delayed(Duration(milliseconds: 100))
 //              .then((onValue) => _controller.forward()));
 //    }
-    _controller.forward();
+    Future.delayed(Duration(milliseconds: 100))
+        .then((onValue) => _controller.forward());
+    //_controller.forward();
   }
 
   @override
@@ -107,9 +109,7 @@ class _LayoutState extends State<Layout> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    ;
     return Scrollbar(
-      //isAlwaysShown: true,
       child: ResponsiveBuilder(
         builder: (context, sizingInformation) => Scaffold(
           appBar: AppBar(
@@ -127,23 +127,23 @@ class _LayoutState extends State<Layout> with SingleTickerProviderStateMixin {
           body: LayoutBuilder(
             builder:
                 (BuildContext context, BoxConstraints viewportConstraints) {
+              var marginHorizontal =
+                  sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+                      ? 10.0
+                      : 70.0;
               return SingleChildScrollView(
                 controller: _scrollController,
                 child: Center(
                   child: IntrinsicHeight(
-                    //child: Expanded(
                     child: Container(
-                      //color: Colors.green,
-                      padding: const EdgeInsets.fromLTRB(
-                          marginLeft / 2, 0.0, marginRight / 2, 0.0),
+                      padding: EdgeInsets.fromLTRB(
+                          marginHorizontal / 2, 0.0, marginHorizontal / 2, 0.0),
                       constraints: BoxConstraints(
                         maxWidth: maxWidth,
                         minHeight: viewportConstraints.maxHeight,
                       ),
-                      //color: Colors.red,
                       height: max(
                           widget.contentHeight, viewportConstraints.maxHeight),
-                      //color: Colors.orange,
                       child: Stack(
                         alignment: Alignment.center,
                         children: <Widget>[
@@ -162,8 +162,8 @@ class _LayoutState extends State<Layout> with SingleTickerProviderStateMixin {
                           ),
                           Container(
                             child: widget.content,
-                            padding: const EdgeInsets.fromLTRB(
-                                marginLeft / 2, 0.0, marginRight / 2, 0.0),
+                            padding: EdgeInsets.fromLTRB(marginHorizontal / 2,
+                                0.0, marginHorizontal / 2, 0.0),
                           ),
                         ],
                       ),
@@ -171,7 +171,6 @@ class _LayoutState extends State<Layout> with SingleTickerProviderStateMixin {
                     // ),
                   ),
                 ),
-                //),
               );
             },
           ),
@@ -189,35 +188,85 @@ class PageLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Layout(
-      leading: NavBarLogo(),
-      title: Socials(),
-      actions: [
-        ButtonBarItem(
-          'Intro',
-          key: UniqueKey(),
-        ),
-        ButtonBarItem(
-          'Services',
-          key: UniqueKey(),
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        ButtonBarItem(
-          'Projets',
-          key: UniqueKey(),
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        ButtonBarItem(
-          'Contact',
-          key: UniqueKey(),
-        ),
-      ],
-      content: content,
-      contentHeight: contentHeight,
+    return ScreenTypeLayout(
+      mobile: Layout(
+        leading: NavBarLogo(),
+        title: Container(),
+        //centerTitle: false,
+        actions: [
+          Builder(
+            // Create an inner BuildContext so that the onPressed methods
+            // can refer to the Scaffold with Scaffold.of().
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: Icon(
+                  Icons.menu,
+                  color: textColor,
+                ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              );
+            },
+          ),
+        ],
+        content: content,
+        contentHeight: contentHeight,
+      ),
+      tablet: Layout(
+        leading: NavBarLogo(),
+        title: Socials(),
+        //centerTitle: false,
+        actions: [
+          Builder(
+            // Create an inner BuildContext so that the onPressed methods
+            // can refer to the Scaffold with Scaffold.of().
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: Icon(
+                  Icons.menu,
+                  color: textColor,
+                ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              );
+            },
+          ),
+        ],
+        content: content,
+        contentHeight: contentHeight,
+      ),
+      desktop: Layout(
+        leading: NavBarLogo(),
+        title: Socials(),
+        actions: [
+          ButtonBarItem(
+            'Intro',
+            key: UniqueKey(),
+          ),
+          ButtonBarItem(
+            'Services',
+            key: UniqueKey(),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          ButtonBarItem(
+            'Projets',
+            key: UniqueKey(),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          ButtonBarItem(
+            'Contact',
+            key: UniqueKey(),
+          ),
+        ],
+        content: content,
+        contentHeight: contentHeight,
+      ),
     );
   }
 }

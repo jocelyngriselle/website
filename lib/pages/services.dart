@@ -10,12 +10,18 @@ import 'package:flutter/scheduler.dart';
 class ServicesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return PageLayout(
-      contentHeight: 850,
-      content: ScreenTypeLayout(
-        desktop: ServicesContentDesktop(),
-        tablet: ServicesContentMobile(),
-        mobile: ServicesContentMobile(),
+    return ScreenTypeLayout(
+      desktop: PageLayout(
+        contentHeight: 850,
+        content: ServicesContentDesktop(),
+      ),
+      tablet: PageLayout(
+        contentHeight: 1900,
+        content: ServicesContentMobile(),
+      ),
+      mobile: PageLayout(
+        contentHeight: 1900,
+        content: ServicesContentMobile(),
       ),
     );
   }
@@ -53,9 +59,24 @@ class ServicesContentMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[], // TODO
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        SizedBox(
+          height: navBarHeight,
+        ),
+        Headline2Section(
+          name: 'Je peux vous rendre',
+          headlineName: 'Service',
+          description:
+              'Innovative experiences that help companies recapture the market from their competitors.',
+        ),
+        MobileServices(),
+        SizedBox(
+          height: navBarHeight,
+        ),
+      ], // TODO
     );
   }
 }
@@ -131,6 +152,37 @@ class _DesktopServicesState extends State<DesktopServices>
   }
 }
 
+class MobileServices extends StatelessWidget {
+  final ServiceModel service;
+  final bool main;
+
+  MobileServices({
+    this.service,
+    this.main: false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        ServiceCard(
+          service: formation,
+        ),
+        ServiceCard(
+          service: backend,
+          main: true,
+        ),
+        ServiceCard(
+          service: mobile,
+        ),
+      ],
+    );
+  }
+}
+
 class ServiceImage extends StatelessWidget {
   final ServiceModel service;
   final bool main;
@@ -168,91 +220,100 @@ class ServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: main ? 350 : 300,
-        height: main ? 600 : 500,
-        child: ShadowedCard(
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                RichText(
-                  text: TextSpan(
-                    text: service.name,
-                    style: Theme.of(context).textTheme.headline5,
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: service.headlineName,
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                ServiceImage(
-                  service: service,
-                  main: main,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    child: SkillBar(
-                      small: true,
-                      skills: service.skills,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Column(
+    return ResponsiveBuilder(
+      builder: (context, sizingInformation) {
+        var ratio =
+            sizingInformation.deviceScreenType == DeviceScreenType.Mobile
+                ? 0.8
+                : 1.0;
+
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: ratio * (main ? 350 : 300),
+            height: main ? 600 : 500,
+            child: ShadowedCard(
+              child: Padding(
+                padding: EdgeInsets.all(ratio * 20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Text(
-                      "${service.experience} d'expérience",
-                      style: Theme.of(context).textTheme.overline,
+                    RichText(
+                      text: TextSpan(
+                        text: service.name,
+                        style: Theme.of(context).textTheme.headline5,
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: service.headlineName,
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      "A partir de ${service.pricing}€ / jour",
-                      style: Theme.of(context).textTheme.overline,
+                    ServiceImage(
+                      service: service,
+                      main: main,
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        child: SkillBar(
+                          small: true,
+                          skills: service.skills,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          "${service.experience} d'expérience",
+                          style: Theme.of(context).textTheme.overline,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "A partir de ${service.pricing}€ / jour",
+                          style: Theme.of(context).textTheme.overline,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Align(
+                        alignment: Alignment.bottomCenter,
+                        child: main
+                            ? FilledButton(
+                                title: "Contact",
+                                color: Theme.of(context).accentColor,
+                                action: () {
+                                  Navigator.of(context)
+                                      .push(createRoute("contact"));
+                                })
+                            : TransparentButton(
+                                title: "Contact",
+                                action: () {
+                                  Navigator.of(context)
+                                      .push(createRoute("contact"));
+                                }))
                   ],
                 ),
-                SizedBox(
-                  height: 30,
-                ),
-                Align(
-                    alignment: Alignment.bottomCenter,
-                    child: main
-                        ? FilledButton(
-                            title: "Contact",
-                            color: Theme.of(context).accentColor,
-                            action: () {
-                              Navigator.of(context)
-                                  .push(createRoute("contact"));
-                            })
-                        : TransparentButton(
-                            title: "Contact",
-                            action: () {
-                              Navigator.of(context)
-                                  .push(createRoute("contact"));
-                            }))
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

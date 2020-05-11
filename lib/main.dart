@@ -42,7 +42,13 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'Jocelyn Griselle',
-      theme: MyTheme.defaultTheme,
+      builder: (context, child) {
+        return new Theme(
+          data: MyTheme.getTheme(MediaQuery.of(context).size),
+          child: child,
+        );
+      },
+      //theme: MyTheme.defaultTheme,
       home: HomePage(),
     );
   }
