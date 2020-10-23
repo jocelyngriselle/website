@@ -241,10 +241,10 @@ class PageLayout extends StatelessWidget {
         leading: NavBarLogo(),
         title: Socials(),
         actions: [
-          ButtonBarItem(
+          /*ButtonBarItem(
             'Intro',
             key: UniqueKey(),
-          ),
+          ),*/
           ButtonBarItem(
             'Services',
             key: UniqueKey(),
